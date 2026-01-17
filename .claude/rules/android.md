@@ -13,32 +13,58 @@ paths: "android/**/*"
 | 最小SDK | 26 (Android 8.0) |
 | アーキテクチャ | MVVM |
 
-## UIデザイン
+## UIデザイン（UI Skills原則）
 
-### カラー（iOS同等）
+### カラー
+- Material 3 システムデフォルトを使用
+- Dynamic Color対応（Android 12+）
+- 背景: `MaterialTheme.colorScheme.background`
+- テキスト: `onBackground` / `onSurfaceVariant`
+- アクセント: `MaterialTheme.colorScheme.primary`
+
+### テーマ設定
 ```kotlin
-val SumiBlack = Color(0xFF1A1A1A)
-val CheckInGreen = Color(0xFF22C55E)
-val TextWhite = Color(0xFFFFFFFF)
+@Composable
+fun LivingTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val colorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        }
+        darkTheme -> darkColorScheme()
+        else -> lightColorScheme()
+    }
+    MaterialTheme(colorScheme = colorScheme, content = content)
+}
 ```
 
 ### メイン画面
 ```kotlin
 @Composable
-fun CheckInScreen(viewModel: CheckInViewModel) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(SumiBlack),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+fun CheckInScreen(onSettingsClick: () -> Unit) {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
-        CheckInButton(onClick = { viewModel.checkIn() })
-        Spacer(modifier = Modifier.height(24.dp))
-        Text("最終確認: ${viewModel.lastCheckIn}", color = TextWhite)
+        // 角丸長方形ボタン、アニメーションなし
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .height(56.dp),
+            shape = RoundedCornerShape(12.dp)
+        ) { ... }
     }
 }
 ```
+
+### アニメーション
+- 不要なアニメーションは削除
+- 200ms以下のフィードバックのみ許可
 
 ## deviceId 永続化
 

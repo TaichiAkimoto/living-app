@@ -1,31 +1,18 @@
 package com.living.app.ui
 
 import android.text.format.DateUtils
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.living.app.data.PreferencesManager
 import com.living.app.data.UserRepository
-import com.living.app.ui.theme.CheckInGreen
-import com.living.app.ui.theme.SumiBlack
-import com.living.app.ui.theme.TextGray
-import com.living.app.ui.theme.TextWhite
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -39,30 +26,32 @@ fun CheckInScreen(
 
     var lastCheckIn by remember { mutableStateOf<Date?>(null) }
     var isLoading by remember { mutableStateOf(false) }
-    var isAnimating by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
-
-    val scale by animateFloatAsState(
-        targetValue = if (isAnimating) 1.1f else 1f,
-        animationSpec = tween(durationMillis = 200),
-        label = "scale"
-    )
 
     LaunchedEffect(Unit) {
         lastCheckIn = repository.getLastCheckIn()
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(SumiBlack)
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Spacer(modifier = Modifier.weight(1f))
+
+            // アプリ名
+            Text(
+                text = "Living",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
             Spacer(modifier = Modifier.weight(1f))
 
             // チェックインボタン
@@ -74,9 +63,6 @@ fun CheckInScreen(
                         try {
                             repository.updateCheckIn()
                             lastCheckIn = Date()
-                            isAnimating = true
-                            delay(300)
-                            isAnimating = false
                         } catch (e: Exception) {
                             errorMessage = "チェックインに失敗しました"
                         }
@@ -84,58 +70,41 @@ fun CheckInScreen(
                     }
                 },
                 modifier = Modifier
-                    .size(200.dp)
-                    .scale(scale)
-                    .shadow(
-                        elevation = if (isAnimating) 30.dp else 20.dp,
-                        shape = CircleShape,
-                        spotColor = CheckInGreen.copy(alpha = 0.5f)
-                    ),
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(containerColor = CheckInGreen),
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ),
                 enabled = !isLoading
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(
-                            color = TextWhite,
-                            modifier = Modifier.size(48.dp)
-                        )
-                    } else {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                } else {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
                             text = "✓",
-                            fontSize = 48.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = TextWhite
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "チェックイン",
+                            text = "確認する",
                             fontSize = 18.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = TextWhite
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // 説明テキスト
-            Text(
-                text = "2日間サインインがない場合",
-                fontSize = 14.sp,
-                color = TextGray
-            )
-            Text(
-                text = "緊急連絡先にメールが届きます",
-                fontSize = 14.sp,
-                color = TextGray
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // 最終確認時刻
             lastCheckIn?.let { date ->
@@ -147,23 +116,31 @@ fun CheckInScreen(
                 Text(
                     text = "最終確認: $relativeTime",
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = TextWhite
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 説明テキスト
+            Text(
+                text = "2日間未確認で通知",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
 
             Spacer(modifier = Modifier.weight(1f))
 
             // エラー表示
             errorMessage?.let { error ->
                 Surface(
-                    color = Color.Red.copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.error,
                     shape = MaterialTheme.shapes.small
                 ) {
                     Text(
                         text = error,
                         fontSize = 14.sp,
-                        color = TextWhite,
+                        color = MaterialTheme.colorScheme.onError,
                         modifier = Modifier.padding(16.dp)
                     )
                 }
@@ -176,9 +153,15 @@ fun CheckInScreen(
                 modifier = Modifier.padding(bottom = 40.dp)
             ) {
                 Text(
-                    text = "⚙️ 設定",
+                    text = "設定",
                     fontSize = 16.sp,
-                    color = TextGray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "→",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }

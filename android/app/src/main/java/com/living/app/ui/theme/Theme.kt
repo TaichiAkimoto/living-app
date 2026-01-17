@@ -1,31 +1,36 @@
 package com.living.app.ui.theme
 
+import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 
-// Colors
-val SumiBlack = Color(0xFF1A1A1A)
-val CheckInGreen = Color(0xFF22C55E)
-val TextWhite = Color(0xFFFFFFFF)
-val TextGray = Color(0xFF9CA3AF)
+private val LightColorScheme = lightColorScheme()
 
-private val DarkColorScheme = darkColorScheme(
-    primary = CheckInGreen,
-    secondary = CheckInGreen,
-    background = SumiBlack,
-    surface = SumiBlack,
-    onPrimary = TextWhite,
-    onSecondary = TextWhite,
-    onBackground = TextWhite,
-    onSurface = TextWhite
-)
+private val DarkColorScheme = darkColorScheme()
 
 @Composable
-fun LivingTheme(content: @Composable () -> Unit) {
+fun LivingTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val colorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        }
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
+    }
+
     MaterialTheme(
-        colorScheme = DarkColorScheme,
+        colorScheme = colorScheme,
         content = content
     )
 }

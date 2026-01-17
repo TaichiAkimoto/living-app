@@ -1,6 +1,5 @@
 package com.living.app.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -19,10 +17,6 @@ import androidx.compose.ui.unit.sp
 import com.living.app.data.PreferencesManager
 import com.living.app.data.UserData
 import com.living.app.data.UserRepository
-import com.living.app.ui.theme.CheckInGreen
-import com.living.app.ui.theme.SumiBlack
-import com.living.app.ui.theme.TextGray
-import com.living.app.ui.theme.TextWhite
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,204 +52,183 @@ fun SettingsScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(SumiBlack)
-            .verticalScroll(rememberScrollState())
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
-        // ヘッダー（初回セットアップ時のみ）
-        if (isInitialSetup) {
-            Spacer(modifier = Modifier.height(40.dp))
-            Text(
-                text = "Living",
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                color = TextWhite
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "生存確認アプリ",
-                fontSize = 16.sp,
-                color = TextGray
-            )
-            Spacer(modifier = Modifier.height(40.dp))
-        } else {
-            // 閉じるボタン
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                TextButton(onClick = onDismiss) {
-                    Text("閉じる", color = TextWhite)
-                }
-            }
-        }
-
-        // 自分の名前
-        Text(
-            text = "あなたの名前",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-            color = TextGray,
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)
-        )
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = TextWhite,
-                unfocusedTextColor = TextWhite,
-                focusedContainerColor = Color.White.copy(alpha = 0.1f),
-                unfocusedContainerColor = Color.White.copy(alpha = 0.1f),
-                focusedBorderColor = CheckInGreen,
-                unfocusedBorderColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-        Divider(color = TextGray.copy(alpha = 0.3f))
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // 緊急連絡先セクション
-        Text(
-            text = "緊急連絡先",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = TextWhite,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
-
-        // 連絡先の名前
-        Text(
-            text = "連絡先の名前",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-            color = TextGray,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)
-        )
-        OutlinedTextField(
-            value = emergencyContactName,
-            onValueChange = { emergencyContactName = it },
-            modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = TextWhite,
-                unfocusedTextColor = TextWhite,
-                focusedContainerColor = Color.White.copy(alpha = 0.1f),
-                unfocusedContainerColor = Color.White.copy(alpha = 0.1f),
-                focusedBorderColor = CheckInGreen,
-                unfocusedBorderColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // メールアドレス
-        Text(
-            text = "メールアドレス",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-            color = TextGray,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)
-        )
-        OutlinedTextField(
-            value = emergencyContactEmail,
-            onValueChange = { emergencyContactEmail = it },
-            modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = TextWhite,
-                unfocusedTextColor = TextWhite,
-                focusedContainerColor = Color.White.copy(alpha = 0.1f),
-                unfocusedContainerColor = Color.White.copy(alpha = 0.1f),
-                focusedBorderColor = CheckInGreen,
-                unfocusedBorderColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // 説明
-        Text(
-            text = "2日間チェックインがない場合、\n緊急連絡先にメールが送信されます",
-            fontSize = 14.sp,
-            color = TextGray,
-            lineHeight = 20.sp
-        )
-
-        // エラー表示
-        errorMessage?.let { error ->
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = error,
-                fontSize = 14.sp,
-                color = Color.Red
-            )
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // 保存ボタン
-        Button(
-            onClick = {
-                scope.launch {
-                    isLoading = true
-                    errorMessage = null
-                    try {
-                        val userData = UserData(
-                            name = name.trim(),
-                            emergencyContactName = emergencyContactName.trim(),
-                            emergencyContactEmail = emergencyContactEmail.trim()
-                        )
-                        repository.saveUserData(userData)
-                        onComplete()
-                    } catch (e: Exception) {
-                        errorMessage = "保存に失敗しました: ${e.localizedMessage}"
-                    }
-                    isLoading = false
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            enabled = isValid && !isLoading,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = if (isValid) CheckInGreen else TextGray,
-                disabledContainerColor = TextGray
-            ),
-            shape = RoundedCornerShape(12.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    color = TextWhite,
-                    modifier = Modifier.size(24.dp)
-                )
-            } else {
+            // ヘッダー（初回セットアップ時のみ）
+            if (isInitialSetup) {
+                Spacer(modifier = Modifier.height(40.dp))
                 Text(
-                    text = if (isInitialSetup) "始める" else "保存",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
+                    text = "Living",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "生存確認アプリ",
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(40.dp))
+            } else {
+                // 閉じるボタン
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text("閉じる")
+                    }
+                }
+            }
+
+            // 自分の名前
+            Text(
+                text = "あなたの名前",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            )
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(),
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+            HorizontalDivider()
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // 緊急連絡先セクション
+            Text(
+                text = "緊急連絡先",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+
+            // 連絡先の名前
+            Text(
+                text = "連絡先の名前",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            )
+            OutlinedTextField(
+                value = emergencyContactName,
+                onValueChange = { emergencyContactName = it },
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(),
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // メールアドレス
+            Text(
+                text = "メールアドレス",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            )
+            OutlinedTextField(
+                value = emergencyContactEmail,
+                onValueChange = { emergencyContactEmail = it },
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(),
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // 説明
+            Text(
+                text = "2日間チェックインがない場合、\n緊急連絡先にメールが送信されます",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = 20.sp
+            )
+
+            // エラー表示
+            errorMessage?.let { error ->
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = error,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.error
                 )
             }
-        }
 
-        Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 保存ボタン
+            Button(
+                onClick = {
+                    scope.launch {
+                        isLoading = true
+                        errorMessage = null
+                        try {
+                            val userData = UserData(
+                                name = name.trim(),
+                                emergencyContactName = emergencyContactName.trim(),
+                                emergencyContactEmail = emergencyContactEmail.trim()
+                            )
+                            repository.saveUserData(userData)
+                            onComplete()
+                        } catch (e: Exception) {
+                            errorMessage = "保存に失敗しました: ${e.localizedMessage}"
+                        }
+                        isLoading = false
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                enabled = isValid && !isLoading,
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                } else {
+                    Text(
+                        text = if (isInitialSetup) "始める" else "保存",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
+        }
     }
 }

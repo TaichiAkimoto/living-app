@@ -17,7 +17,7 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.sumiBlack
+                Color(.systemBackground)
                     .ignoresSafeArea()
 
                 ScrollView {
@@ -27,11 +27,11 @@ struct SettingsView: View {
                             VStack(spacing: 12) {
                                 Text("Living")
                                     .font(.system(size: 36, weight: .bold))
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.primary)
 
                                 Text("生存確認アプリ")
                                     .font(.system(size: 16))
-                                    .foregroundColor(.gray)
+                                    .foregroundStyle(.secondary)
                             }
                             .padding(.top, 40)
                         }
@@ -42,39 +42,38 @@ struct SettingsView: View {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("あなたの名前")
                                     .font(.system(size: 14, weight: .medium))
-                                    .foregroundColor(.gray)
+                                    .foregroundStyle(.secondary)
 
                                 TextField("", text: $name)
-                                    .textFieldStyle(DarkTextFieldStyle())
+                                    .textFieldStyle(SystemTextFieldStyle())
                                     .autocorrectionDisabled()
                             }
 
                             Divider()
-                                .background(Color.gray.opacity(0.3))
 
                             // 緊急連絡先セクション
                             VStack(alignment: .leading, spacing: 16) {
                                 Text("緊急連絡先")
                                     .font(.system(size: 18, weight: .semibold))
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.primary)
 
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text("連絡先の名前")
                                         .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(.gray)
+                                        .foregroundStyle(.secondary)
 
                                     TextField("", text: $emergencyContactName)
-                                        .textFieldStyle(DarkTextFieldStyle())
+                                        .textFieldStyle(SystemTextFieldStyle())
                                         .autocorrectionDisabled()
                                 }
 
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text("メールアドレス")
                                         .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(.gray)
+                                        .foregroundStyle(.secondary)
 
                                     TextField("", text: $emergencyContactEmail)
-                                        .textFieldStyle(DarkTextFieldStyle())
+                                        .textFieldStyle(SystemTextFieldStyle())
                                         .keyboardType(.emailAddress)
                                         .textInputAutocapitalization(.never)
                                         .autocorrectionDisabled()
@@ -86,7 +85,7 @@ struct SettingsView: View {
                         // 説明
                         Text("2日間チェックインがない場合、\n緊急連絡先にメールが送信されます")
                             .font(.system(size: 14))
-                            .foregroundColor(.gray)
+                            .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
 
                         // エラー表示
@@ -110,9 +109,9 @@ struct SettingsView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .frame(height: 56)
-                            .background(isValid ? Color.checkInGreen : Color.gray)
+                            .background(isValid ? Color.accentColor : Color.gray)
                             .foregroundColor(.white)
-                            .cornerRadius(12)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
                         }
                         .disabled(!isValid || isLoading)
                         .padding(.horizontal, 24)
@@ -128,7 +127,6 @@ struct SettingsView: View {
                         Button("閉じる") {
                             dismiss()
                         }
-                        .foregroundColor(.white)
                     }
                 }
             }
@@ -191,14 +189,14 @@ struct SettingsView: View {
     }
 }
 
-// MARK: - Dark TextField Style
-struct DarkTextFieldStyle: TextFieldStyle {
+// MARK: - System TextField Style
+struct SystemTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
             .padding()
-            .background(Color.white.opacity(0.1))
-            .foregroundColor(.white)
-            .cornerRadius(8)
+            .background(Color(.secondarySystemBackground))
+            .foregroundStyle(.primary)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }
 
