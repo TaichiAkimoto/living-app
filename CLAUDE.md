@@ -6,15 +6,16 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 **最終更新**: 2026-01-17
 
-### 進行中
-- 設計ドキュメント作成完了
+### 完了
+- iOS: SwiftUI実装（CheckInView, SettingsView, FirebaseService）
+- Android: Jetpack Compose実装（同等機能）
+- Firebase: Cloud Functions（2日間チェック + Resendメール送信）
 
 ### 次にやること
-1. iOS: Xcodeプロジェクト作成
-2. iOS: チェックイン画面実装（SwiftUI）
-3. iOS: 設定画面実装
-4. Firebase: Firestore設定
-5. Firebase: Cloud Functions実装
+1. Firebaseプロジェクト作成・設定
+2. GoogleService-Info.plist / google-services.json 追加
+3. Resend APIキー設定
+4. 実機テスト
 
 ## クイックスタート
 
