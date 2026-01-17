@@ -42,21 +42,25 @@ paths: "ios/**/*"
 - 不要なアニメーションは削除
 - 200ms以下のフィードバックのみ許可
 
-## deviceId 永続化
+## deviceId（Anonymous Auth UID）
 
 ```swift
-// Keychainに保存（アプリ再インストールでも維持）
-import KeychainAccess
+import FirebaseAuth
 
-let keychain = Keychain(service: "com.living.app")
+// Anonymous Auth UID を deviceId として使用
+// Firestore ルールで auth.uid == deviceId を要求
+var deviceId: String? {
+    Auth.auth().currentUser?.uid
+}
 
-func getOrCreateDeviceId() -> String {
-    if let existing = keychain["deviceId"] {
-        return existing
+// 起動時に Anonymous Auth サインイン
+func signInAnonymously() {
+    if Auth.auth().currentUser != nil { return }
+    Auth.auth().signInAnonymously { _, error in
+        if let error = error {
+            print("Anonymous auth error: \(error)")
+        }
     }
-    let newId = UUID().uuidString
-    keychain["deviceId"] = newId
-    return newId
 }
 ```
 

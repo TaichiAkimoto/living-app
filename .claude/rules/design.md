@@ -21,9 +21,9 @@ firebase use dev && firebase deploy   # dev環境
 firebase use prod && firebase deploy  # prod環境
 ```
 
-### Cloud Functions 環境ガード
-- dev: メール送信は dry-run（実際には送信しない）
-- prod: 実際にメール送信
+### Cloud Functions
+- dev/prod: 両環境で実際にメール送信
+- Resend APIキーは両プロジェクトのSecret Managerに設定済み
 
 ## 認証（Anonymous Auth）
 

@@ -66,33 +66,22 @@ fun CheckInScreen(onSettingsClick: () -> Unit) {
 - 不要なアニメーションは削除
 - 200ms以下のフィードバックのみ許可
 
-## deviceId 永続化
+## deviceId（Anonymous Auth UID）
 
 ```kotlin
-// EncryptedSharedPreferences使用
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 
-class DeviceIdManager(context: Context) {
-    private val masterKey = MasterKey.Builder(context)
-        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        .build()
+// Anonymous Auth UID を deviceId として使用
+// Firestore ルールで auth.uid == deviceId を要求
+val deviceId: String?
+    get() = Firebase.auth.currentUser?.uid
 
-    private val prefs = EncryptedSharedPreferences.create(
-        context,
-        "living_prefs",
-        masterKey,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
-
-    fun getOrCreateDeviceId(): String {
-        return prefs.getString("deviceId", null) ?: run {
-            val newId = UUID.randomUUID().toString()
-            prefs.edit().putString("deviceId", newId).apply()
-            newId
-        }
-    }
+// 起動時に Anonymous Auth サインイン（LivingApplication.kt）
+suspend fun signInAnonymously() {
+    if (Firebase.auth.currentUser != null) return
+    Firebase.auth.signInAnonymously().await()
 }
 ```
 
