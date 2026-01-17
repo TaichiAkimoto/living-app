@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // users: deviceIdで認証なしアクセス（シンプル優先）
+    match /users/{deviceId} {
+      allow read, write: if true;
+    }
+
+    // notificationLogs: Cloud Functions専用（クライアントからはアクセス不可）
+    match /notificationLogs/{logId} {
+      allow read, write: if false;
+    }
+  }
+}
