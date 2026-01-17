@@ -92,7 +92,7 @@ struct SettingsView: View {
                         if let error = errorMessage {
                             Text(error)
                                 .font(.system(size: 14))
-                                .foregroundColor(.red)
+                                .foregroundStyle(Color(.systemRed))
                                 .padding()
                         }
 
@@ -109,7 +109,7 @@ struct SettingsView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .frame(height: 56)
-                            .background(isValid ? Color.accentColor : Color.gray)
+                            .background(isValid ? Color.accentColor : Color(.systemGray3))
                             .foregroundColor(.white)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                         }

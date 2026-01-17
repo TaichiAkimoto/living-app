@@ -73,9 +73,9 @@ struct CheckInView: View {
                     Spacer()
                     Text(error)
                         .font(.system(size: 14))
-                        .foregroundColor(.white)
+                        .foregroundStyle(.white)
                         .padding()
-                        .background(Color.red.opacity(0.9))
+                        .background(Color(.systemRed))
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                         .padding(.bottom, 100)
                 }

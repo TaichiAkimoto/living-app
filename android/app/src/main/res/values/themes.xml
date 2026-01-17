@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Living" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">#1A1A1A</item>
-        <item name="android:navigationBarColor">#1A1A1A</item>
+    <style name="Theme.Living" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- System bars use dynamic colors from Material 3 theme -->
     </style>
 </resources>
