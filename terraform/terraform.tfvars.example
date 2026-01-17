@@ -1,0 +1,6 @@
+project_id         = "your-project-id"
+region             = "asia-northeast1"
+firestore_location = "asia-northeast1"
+
+# Resend API key
+# resend_api_key = "re_xxxxx"
