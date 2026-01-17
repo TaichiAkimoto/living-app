@@ -106,7 +106,7 @@ async function sendEmergencyEmail(
   const resend = new Resend(apiKey);
 
   await resend.emails.send({
-    from: "Living <noreply@living.app>",
+    from: "Living <noreply@7th-bridge.com>",
     to: contactEmail,
     subject: `【Living】${userName}さんの生存確認通知`,
     text: `${contactName}様
