@@ -10,28 +10,9 @@ resource "google_firestore_database" "main" {
 }
 
 # Firestore Security Rules
-resource "google_firebaserules_ruleset" "firestore" {
-  provider = google-beta
-  project  = var.project_id
-
-  source {
-    files {
-      name    = "firestore.rules"
-      content = file("${path.module}/../firebase/firestore.rules")
-    }
-  }
-
-  depends_on = [google_firestore_database.main]
-}
-
-resource "google_firebaserules_release" "firestore" {
-  provider     = google-beta
-  project      = var.project_id
-  name         = "cloud.firestore"
-  ruleset_name = google_firebaserules_ruleset.firestore.name
-
-  depends_on = [google_firebaserules_ruleset.firestore]
-}
+# NOTE: Rules are deployed via Firebase CLI (firebase deploy --only firestore:rules)
+# This avoids conflicts between Terraform and Firebase CLI deployments.
+# See: firebase/firestore.rules
 
 # Firestore Indexes (複合インデックス)
 resource "google_firestore_index" "users_inactive" {

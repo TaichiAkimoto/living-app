@@ -11,23 +11,47 @@ paths: "firebase/**/*"
 | Cloud Firestore | データ保存 |
 | Cloud Functions | 2日間チェック・メール送信 |
 | Cloud Scheduler | 毎日バッチ実行 |
+| Firebase Auth | Anonymous Auth（UID = deviceId） |
 | Resend | メール送信API |
 
-## Firestoreルール
+## 環境分離
+
+| 環境 | Firebase Project | 用途 |
+|------|-----------------|------|
+| dev | `livingdev-5cb56` | 開発・テスト |
+| prod | `living-2b928` | 本番 |
+
+### .firebaserc
+```json
+{
+  "projects": {
+    "default": "living-2b928",
+    "dev": "livingdev-5cb56",
+    "prod": "living-2b928"
+  }
+}
+```
+
+### 使い方
+```bash
+firebase use dev && firebase deploy   # dev環境
+firebase use prod && firebase deploy  # prod環境
+```
+
+## Firestoreルール（Anonymous Auth対応）
 
 ```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // users: deviceIdで認証なしアクセス
+    // users: Anonymous Auth UID でスコープ制限
     match /users/{deviceId} {
-      allow read, write: if true;  // シンプル優先
+      allow read, write: if request.auth != null && request.auth.uid == deviceId;
     }
 
     // notificationLogs: Functions専用
     match /notificationLogs/{logId} {
-      allow read: if false;
-      allow write: if false;
+      allow read, write: if false;
     }
   }
 }
@@ -35,17 +59,18 @@ service cloud.firestore {
 
 ## Cloud Functions
 
-### checkInactiveUsers.ts
+### 環境判定
+```typescript
+// 環境判定（ログ出力用）
+const ENV = functions.config().env?.name || process.env.FUNCTIONS_ENV || "prod";
+```
+
+> **Note**: dev/prod両環境で実際にメール送信を行う。Resend APIキーは両プロジェクトのSecret Managerに設定済み。
+
+### checkInactiveUsers
 
 ```typescript
-import * as functions from 'firebase-functions';
-import { Firestore } from 'firebase-admin/firestore';
-import { Resend } from 'resend';
-
-const db = new Firestore();
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-export const scheduledCheck = functions.pubsub
+export const checkInactiveUsers = functions.pubsub
   .schedule('0 9 * * *')  // 毎日9:00 UTC
   .timeZone('UTC')
   .onRun(async () => {
@@ -57,55 +82,11 @@ export const scheduledCheck = functions.pubsub
       .get();
 
     for (const doc of snapshot.docs) {
-      const user = doc.data();
-      await sendEmergencyEmail(doc.id, user);
+      await processInactiveUser(doc.id, doc.data());
     }
+
+    await retryFailedNotifications();
   });
-```
-
-### sendEmail.ts
-
-```typescript
-async function sendEmergencyEmail(deviceId: string, user: any) {
-  const { name, emergencyContactEmail, emergencyContactName } = user;
-
-  // バリデーション
-  if (!emergencyContactEmail || !emergencyContactEmail.includes('@')) {
-    await logNotification(deviceId, emergencyContactEmail, 'skipped', 0);
-    return;
-  }
-
-  try {
-    await resend.emails.send({
-      from: 'Living <noreply@living.app>',
-      to: emergencyContactEmail,
-      subject: `【Living】${name}さんの生存確認通知`,
-      text: `${emergencyContactName}様\n\n${name}さんが2日間Livingアプリでチェックインしていません。\nご確認をお願いいたします。\n\n---\nLiving - 生存確認アプリ`
-    });
-
-    // 成功: notified = true に更新
-    await db.collection('users').doc(deviceId).update({ notified: true });
-    await logNotification(deviceId, emergencyContactEmail, 'sent', 1);
-
-  } catch (error) {
-    await logNotification(deviceId, emergencyContactEmail, 'failed', 1);
-  }
-}
-
-async function logNotification(
-  deviceId: string,
-  sentTo: string,
-  status: string,
-  attemptCount: number
-) {
-  await db.collection('notificationLogs').add({
-    deviceId,
-    sentTo,
-    sentAt: new Date(),
-    status,
-    attemptCount
-  });
-}
 ```
 
 ## 再試行ロジック
@@ -118,14 +99,28 @@ const failedLogs = await db.collection('notificationLogs')
   .get();
 ```
 
-## 環境変数
+## Secret Manager
 
+Resend API Key は Secret Manager で管理:
 ```bash
-# .env
-RESEND_API_KEY=re_xxxxxxxxxxxx
+# Terraform で設定済み
+# terraform/secrets.tf 参照
 ```
 
+## デプロイ手順
+
+### dev環境
 ```bash
-# Firebase Functions設定
-firebase functions:config:set resend.api_key="re_xxxxxxxxxxxx"
+cd firebase
+firebase use dev
+firebase deploy --only firestore:rules
+firebase deploy --only functions
+```
+
+### prod環境
+```bash
+cd firebase
+firebase use prod
+firebase deploy --only firestore:rules
+firebase deploy --only functions
 ```

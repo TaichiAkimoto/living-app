@@ -5,10 +5,19 @@ options:
     iOS: "17.0"
   xcodeVersion: "15.0"
 
+configs:
+  Debug: debug
+  Release: release
+
 settings:
   base:
     SWIFT_VERSION: "5.9"
     GENERATE_INFOPLIST_FILE: YES
+  configs:
+    Debug:
+      PRODUCT_BUNDLE_IDENTIFIER: com.living.app.dev
+    Release:
+      PRODUCT_BUNDLE_IDENTIFIER: com.living.app
 
 targets:
   Living:
@@ -23,9 +32,20 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_CFBundleDisplayName: Living
+    postBuildScripts:
+      - name: Copy Firebase Config
+        script: |
+          if [ "${CONFIGURATION}" == "Debug" ]; then
+            cp "${PROJECT_DIR}/Living/Firebase/Dev/GoogleService-Info.plist" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist"
+          else
+            cp "${PROJECT_DIR}/Living/Firebase/Prod/GoogleService-Info.plist" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist"
+          fi
+        basedOnDependencyAnalysis: false
     dependencies:
       - package: firebase-ios-sdk
         product: FirebaseFirestore
+      - package: firebase-ios-sdk
+        product: FirebaseAuth
       - package: KeychainAccess
 
 packages:

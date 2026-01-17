@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "275422097943",
+    "project_id": "livingdev-5cb56",
+    "storage_bucket": "livingdev-5cb56.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275422097943:android:c9ca3305d3c6c518dc2252",
+        "android_client_info": {
+          "package_name": "com.living.app.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1XX-b5B1NIcVcSoz2pBVQ53IKcP8x-8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

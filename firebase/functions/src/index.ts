@@ -8,6 +8,9 @@ admin.initializeApp();
 const db = admin.firestore();
 const secretClient = new SecretManagerServiceClient();
 
+// 環境判定（ログ出力用）
+const ENV = functions.config().env?.name || process.env.FUNCTIONS_ENV || "prod";
+
 // Secret Manager から Resend API Key を取得
 async function getResendApiKey(): Promise<string> {
   const projectId = process.env.GCLOUD_PROJECT || process.env.GCP_PROJECT;
@@ -25,7 +28,7 @@ export const checkInactiveUsers = functions.pubsub
   .schedule("0 9 * * *")
   .timeZone("UTC")
   .onRun(async () => {
-    console.log("Starting inactive users check...");
+    console.log(`Starting inactive users check... (ENV: ${ENV})`);
 
     // 48時間前のタイムスタンプ
     const threshold = new Date(Date.now() - 48 * 60 * 60 * 1000);

@@ -1,0 +1,30 @@
+{
+  "_comment": "PLACEHOLDER: Download from Firebase Console. Project: living-2b928, Package: com.living.app",
+  "project_info": {
+    "project_number": "REPLACE_WITH_ACTUAL_VALUE",
+    "project_id": "living-2b928",
+    "storage_bucket": "living-2b928.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "REPLACE_WITH_ACTUAL_VALUE",
+        "android_client_info": {
+          "package_name": "com.living.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "REPLACE_WITH_ACTUAL_VALUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -21,6 +21,20 @@ android {
         }
     }
 
+    // 環境分離: dev/prod
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            resValue("string", "app_name", "Living Dev")
+        }
+        create("prod") {
+            dimension = "environment"
+            resValue("string", "app_name", "Living")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -71,6 +85,7 @@ dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
 
     // Security
     implementation("androidx.security:security-crypto:1.1.0-alpha06")

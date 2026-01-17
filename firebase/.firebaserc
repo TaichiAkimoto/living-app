@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "living-2b928"
+    "default": "living-2b928",
+    "dev": "livingdev-5cb56",
+    "prod": "living-2b928"
   }
 }
