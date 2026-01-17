@@ -2,9 +2,9 @@ import SwiftUI
 
 struct SettingsView: View {
     let isInitialSetup: Bool
+    var onComplete: (() -> Void)? = nil
 
     @Environment(\.dismiss) private var dismiss
-    @AppStorage("hasCompletedSetup") private var hasCompletedSetup = false
 
     @State private var name = ""
     @State private var emergencyContactName = ""
@@ -25,7 +25,7 @@ struct SettingsView: View {
                         // ヘッダー
                         if isInitialSetup {
                             VStack(spacing: 12) {
-                                Text("Living")
+                                Text("生きろ。")
                                     .font(.system(size: 36, weight: .bold))
                                     .foregroundStyle(.primary)
 
@@ -174,8 +174,9 @@ struct SettingsView: View {
 
                 await MainActor.run {
                     isLoading = false
-                    hasCompletedSetup = true
-                    if !isInitialSetup {
+                    if isInitialSetup {
+                        onComplete?()
+                    } else {
                         dismiss()
                     }
                 }

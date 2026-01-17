@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108">
+  <!-- Adaptive icon foreground - content in safe zone (center 66dp of 108dp) -->
+
+  <!-- Connecting line -->
+  <line x1="30" y1="54" x2="78" y2="54" stroke="#81C784" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Left dot glow -->
+  <circle cx="30" cy="54" r="14" fill="#81C784" fill-opacity="0.3"/>
+  <!-- Left dot -->
+  <circle cx="30" cy="54" r="10" fill="#4CAF50"/>
+
+  <!-- Right dot glow -->
+  <circle cx="78" cy="54" r="14" fill="#81C784" fill-opacity="0.3"/>
+  <!-- Right dot -->
+  <circle cx="78" cy="54" r="10" fill="#4CAF50"/>
+</svg>

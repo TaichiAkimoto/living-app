@@ -9,12 +9,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.living.app.data.PreferencesManager
 import com.living.app.data.UserData
 import com.living.app.data.UserRepository
 import kotlinx.coroutines.launch
@@ -26,9 +24,7 @@ fun SettingsScreen(
     onComplete: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val context = LocalContext.current
-    val preferencesManager = remember { PreferencesManager(context) }
-    val repository = remember { UserRepository(preferencesManager.deviceId) }
+    val repository = remember { UserRepository() }
 
     var name by remember { mutableStateOf("") }
     var emergencyContactName by remember { mutableStateOf("") }
@@ -67,7 +63,7 @@ fun SettingsScreen(
             if (isInitialSetup) {
                 Spacer(modifier = Modifier.height(40.dp))
                 Text(
-                    text = "Living",
+                    text = "生きろ。",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground
@@ -111,7 +107,7 @@ fun SettingsScreen(
             )
 
             Spacer(modifier = Modifier.height(24.dp))
-            HorizontalDivider()
+            Divider()
             Spacer(modifier = Modifier.height(24.dp))
 
             // 緊急連絡先セクション

@@ -10,6 +10,7 @@
 		1E563019DA4CC0A605F69F02 /* LivingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF5DCB22D3D91529B163EA0 /* LivingApp.swift */; };
 		4ECFC546436C1E407E2DACC7 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = D59EF6E72B1E86A7534081C0 /* KeychainAccess */; };
 		5A6B7C8D9E0F1A2B3C4D5E6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A6B7C8D9E0F1A2B3C4D5E60 /* GoogleService-Info.plist */; };
+		ASSETS010001000100010001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ASSETS010001000100010002 /* Assets.xcassets */; };
 		7A1B2C3D4E5F6789ABCDEF01 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 7A1B2C3D4E5F6789ABCDEF00 /* FirebaseAuth */; };
 		8F9856937C88AD99FAF57964 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 12333CE3B5DFD14AAE102EA7 /* FirebaseFirestore */; };
 		A842A4BF3A6F978C598C1F59 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC5DDB721B648D131CEBDC /* FirebaseService.swift */; };
@@ -17,10 +18,13 @@
 		C6A5069ACC62E00D13AFDD37 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C002F3A64288043E6AB95 /* UserData.swift */; };
 		C7FE6F4641FE517B4879F517 /* CheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCFE8E380459C45A130FFE01 /* CheckInView.swift */; };
 		ED207EEE83F931B21C360DE2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C0BDFF9DD3164BF36AD19F /* SettingsView.swift */; };
+		SPLASH0100010001000100AA /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SPLASH0100010001000100AB /* SplashView.swift */; };
+		ONBOARD0100010001000100AA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ONBOARD0100010001000100AB /* OnboardingView.swift */; };
 		TEST0001000100010001000A /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TEST0001000100010001000B /* DateExtensionTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		ASSETS010001000100010002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A6B7C8D9E0F1A2B3C4D5E60 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		72C0BDFF9DD3164BF36AD19F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7E111837E8199880BFD707DB /* CheckInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInViewModel.swift; sourceTree = "<group>"; };
@@ -29,6 +33,8 @@
 		DCFE8E380459C45A130FFE01 /* CheckInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInView.swift; sourceTree = "<group>"; };
 		E38ED9B904389647F234C086 /* Living.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Living.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF5DCB22D3D91529B163EA0 /* LivingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivingApp.swift; sourceTree = "<group>"; };
+		SPLASH0100010001000100AB /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		ONBOARD0100010001000100AB /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		TEST0001000100010001000B /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		TEST0001000100010001000C /* LivingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LivingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -92,7 +98,9 @@
 			children = (
 				DCFE8E380459C45A130FFE01 /* CheckInView.swift */,
 				7E111837E8199880BFD707DB /* CheckInViewModel.swift */,
+				ONBOARD0100010001000100AB /* OnboardingView.swift */,
 				72C0BDFF9DD3164BF36AD19F /* SettingsView.swift */,
+				SPLASH0100010001000100AB /* SplashView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -118,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				93CFEB1DA06BD88F557674BF /* App */,
+				ASSETS010001000100010002 /* Assets.xcassets */,
 				6FC3C64CF7325590955B2295 /* Models */,
 				0DEC06DD5129AB3A92399DC1 /* Services */,
 				93E2793F0B9268F16802CF3B /* Views */,
@@ -151,6 +160,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ASSETS010001000100010001 /* Assets.xcassets in Resources */,
 				5A6B7C8D9E0F1A2B3C4D5E6F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,7 +249,9 @@
 				B1B698E214E9925ACA2F197A /* CheckInViewModel.swift in Sources */,
 				A842A4BF3A6F978C598C1F59 /* FirebaseService.swift in Sources */,
 				1E563019DA4CC0A605F69F02 /* LivingApp.swift in Sources */,
+				ONBOARD0100010001000100AA /* OnboardingView.swift in Sources */,
 				ED207EEE83F931B21C360DE2 /* SettingsView.swift in Sources */,
+				SPLASH0100010001000100AA /* SplashView.swift in Sources */,
 				C6A5069ACC62E00D13AFDD37 /* UserData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,7 +336,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				INFOPLIST_KEY_CFBundleDisplayName = Living;
+				INFOPLIST_KEY_CFBundleDisplayName = "生きろ。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -401,7 +413,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				INFOPLIST_KEY_CFBundleDisplayName = Living;
+				INFOPLIST_KEY_CFBundleDisplayName = "生きろ。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

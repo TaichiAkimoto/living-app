@@ -22,6 +22,10 @@ class PreferencesManager(context: Context) {
         get() = prefs.getBoolean(KEY_HAS_COMPLETED_SETUP, false)
         set(value) = prefs.edit().putBoolean(KEY_HAS_COMPLETED_SETUP, value).apply()
 
+    var hasSeenOnboarding: Boolean
+        get() = prefs.getBoolean(KEY_HAS_SEEN_ONBOARDING, false)
+        set(value) = prefs.edit().putBoolean(KEY_HAS_SEEN_ONBOARDING, value).apply()
+
     val deviceId: String
         get() = prefs.getString(KEY_DEVICE_ID, null) ?: run {
             val newId = UUID.randomUUID().toString()
@@ -31,6 +35,7 @@ class PreferencesManager(context: Context) {
 
     companion object {
         private const val KEY_HAS_COMPLETED_SETUP = "has_completed_setup"
+        private const val KEY_HAS_SEEN_ONBOARDING = "has_seen_onboarding"
         private const val KEY_DEVICE_ID = "device_id"
     }
 }

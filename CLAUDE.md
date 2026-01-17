@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-17
+**最終更新**: 2026-01-17 23:20
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -12,10 +12,22 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 - 環境分離: dev/prod 完全分離（Firebase, bundleId, applicationId）
 - 認証: Firebase Anonymous Auth（両環境で有効）
 - デプロイ: dev/prod 両環境にFirestoreルール・Functions デプロイ済み
+- **UI/アニメーション実装**:
+  - スプラッシュ画面（2つの点が繋がるアニメーション）
+  - オンボーディング（3画面スワイプ）
+  - チェックイン成功時の波動アニメーション
+  - アプリアイコン（◯───◯モチーフ）
+- **アプリ名変更**: Living → 「生きろ。」
 
 ### 次にやること
-1. 実機テスト（iOS/Android）
-2. App Store / Google Play 申請準備
+1. **設定画面の「始める」ボタン問題の調査** - Firebase保存は成功しているか確認
+2. 実機テスト（iOS/Android）
+3. App Store / Google Play 申請準備
+
+### 既知の問題
+- 設定画面の「始める」ボタンを押しても反応しない場合がある
+  - 状態管理は修正済み（AppState + onCompleteコールバック方式）
+  - Firebase保存の成功/失敗を確認する必要あり
 
 ## クイックスタート
 

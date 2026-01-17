@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+
+  <!-- Connecting line -->
+  <line x1="312" y1="512" x2="712" y2="512" stroke="#81C784" stroke-width="40" stroke-linecap="round"/>
+
+  <!-- Left dot glow -->
+  <circle cx="312" cy="512" r="140" fill="#81C784" fill-opacity="0.3"/>
+  <!-- Left dot -->
+  <circle cx="312" cy="512" r="100" fill="#4CAF50"/>
+
+  <!-- Right dot glow -->
+  <circle cx="712" cy="512" r="140" fill="#81C784" fill-opacity="0.3"/>
+  <!-- Right dot -->
+  <circle cx="712" cy="512" r="100" fill="#4CAF50"/>
+</svg>
