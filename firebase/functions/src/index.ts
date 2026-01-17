@@ -1,13 +1,21 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import { Resend } from "resend";
+import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 
 admin.initializeApp();
 
 const db = admin.firestore();
+const secretClient = new SecretManagerServiceClient();
 
-// Resend API Key (Firebase Functions config から取得)
-const resendApiKey = functions.config().resend?.api_key || process.env.RESEND_API_KEY;
+// Secret Manager から Resend API Key を取得
+async function getResendApiKey(): Promise<string> {
+  const projectId = process.env.GCLOUD_PROJECT || process.env.GCP_PROJECT;
+  const [version] = await secretClient.accessSecretVersion({
+    name: `projects/${projectId}/secrets/resend-api-key/versions/latest`,
+  });
+  return version.payload?.data?.toString() || "";
+}
 
 /**
  * 毎日9:00 UTCに実行される定期チェック
@@ -90,11 +98,12 @@ async function sendEmergencyEmail(
   contactName: string,
   contactEmail: string
 ): Promise<void> {
-  if (!resendApiKey) {
+  const apiKey = await getResendApiKey();
+  if (!apiKey) {
     throw new Error("Resend API key not configured");
   }
 
-  const resend = new Resend(resendApiKey);
+  const resend = new Resend(apiKey);
 
   await resend.emails.send({
     from: "Living <noreply@living.app>",

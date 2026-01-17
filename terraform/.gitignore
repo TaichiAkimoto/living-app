@@ -5,6 +5,7 @@
 *.tfstate.*
 *.tfvars
 !terraform.tfvars.example
+tfplan
 
 # Crash logs
 crash.log
