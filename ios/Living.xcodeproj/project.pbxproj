@@ -9,15 +9,19 @@
 /* Begin PBXBuildFile section */
 		1E563019DA4CC0A605F69F02 /* LivingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF5DCB22D3D91529B163EA0 /* LivingApp.swift */; };
 		4ECFC546436C1E407E2DACC7 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = D59EF6E72B1E86A7534081C0 /* KeychainAccess */; };
+		5A6B7C8D9E0F1A2B3C4D5E6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A6B7C8D9E0F1A2B3C4D5E60 /* GoogleService-Info.plist */; };
+		7A1B2C3D4E5F6789ABCDEF01 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 7A1B2C3D4E5F6789ABCDEF00 /* FirebaseAuth */; };
 		8F9856937C88AD99FAF57964 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 12333CE3B5DFD14AAE102EA7 /* FirebaseFirestore */; };
 		A842A4BF3A6F978C598C1F59 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC5DDB721B648D131CEBDC /* FirebaseService.swift */; };
 		B1B698E214E9925ACA2F197A /* CheckInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E111837E8199880BFD707DB /* CheckInViewModel.swift */; };
 		C6A5069ACC62E00D13AFDD37 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C002F3A64288043E6AB95 /* UserData.swift */; };
 		C7FE6F4641FE517B4879F517 /* CheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCFE8E380459C45A130FFE01 /* CheckInView.swift */; };
 		ED207EEE83F931B21C360DE2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C0BDFF9DD3164BF36AD19F /* SettingsView.swift */; };
+		TEST0001000100010001000A /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TEST0001000100010001000B /* DateExtensionTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A6B7C8D9E0F1A2B3C4D5E60 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		72C0BDFF9DD3164BF36AD19F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7E111837E8199880BFD707DB /* CheckInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInViewModel.swift; sourceTree = "<group>"; };
 		9E2C002F3A64288043E6AB95 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
@@ -25,6 +29,8 @@
 		DCFE8E380459C45A130FFE01 /* CheckInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInView.swift; sourceTree = "<group>"; };
 		E38ED9B904389647F234C086 /* Living.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Living.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF5DCB22D3D91529B163EA0 /* LivingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivingApp.swift; sourceTree = "<group>"; };
+		TEST0001000100010001000B /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
+		TEST0001000100010001000C /* LivingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LivingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,8 +38,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A1B2C3D4E5F6789ABCDEF01 /* FirebaseAuth in Frameworks */,
 				8F9856937C88AD99FAF57964 /* FirebaseFirestore in Frameworks */,
 				4ECFC546436C1E407E2DACC7 /* KeychainAccess in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		TEST0001000100010001001C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				E38ED9B904389647F234C086 /* Living.app */,
+				TEST0001000100010001000C /* LivingTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -86,8 +101,17 @@
 			isa = PBXGroup;
 			children = (
 				F9CC46F70A3B601BE3FA7994 /* Living */,
+				TEST0001000100010001000D /* LivingTests */,
 				83FB942C953FD0D5FA51BADA /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		TEST0001000100010001000D /* LivingTests */ = {
+			isa = PBXGroup;
+			children = (
+				TEST0001000100010001000B /* DateExtensionTests.swift */,
+			);
+			path = LivingTests;
 			sourceTree = "<group>";
 		};
 		F9CC46F70A3B601BE3FA7994 /* Living */ = {
@@ -97,11 +121,41 @@
 				6FC3C64CF7325590955B2295 /* Models */,
 				0DEC06DD5129AB3A92399DC1 /* Services */,
 				93E2793F0B9268F16802CF3B /* Views */,
+				5A6B7C8D9E0F1A2B3C4D5E60 /* GoogleService-Info.plist */,
 			);
 			path = Living;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXContainerItemProxy section */
+		TEST0001000100010001000E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75E881C69B1B402289F98EFF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F59F5922C28E64FA4512D7A2;
+			remoteInfo = Living;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		TEST0001000100010001000F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F59F5922C28E64FA4512D7A2 /* Living */;
+			targetProxy = TEST0001000100010001000E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5A6B7C8D9E0F1A2B3C4D5E61 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A6B7C8D9E0F1A2B3C4D5E6F /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		F59F5922C28E64FA4512D7A2 /* Living */ = {
@@ -110,6 +164,7 @@
 			buildPhases = (
 				509B2B6DAD1FA85DD7A14E74 /* Sources */,
 				99E6B4A152A06C7D6D130104 /* Frameworks */,
+				5A6B7C8D9E0F1A2B3C4D5E61 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -117,12 +172,30 @@
 			);
 			name = Living;
 			packageProductDependencies = (
+				7A1B2C3D4E5F6789ABCDEF00 /* FirebaseAuth */,
 				12333CE3B5DFD14AAE102EA7 /* FirebaseFirestore */,
 				D59EF6E72B1E86A7534081C0 /* KeychainAccess */,
 			);
 			productName = Living;
 			productReference = E38ED9B904389647F234C086 /* Living.app */;
 			productType = "com.apple.product-type.application";
+		};
+		TEST0001000100010001001A /* LivingTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = TEST0001000100010001001D /* Build configuration list for PBXNativeTarget "LivingTests" */;
+			buildPhases = (
+				TEST0001000100010001001B /* Sources */,
+				TEST0001000100010001001C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				TEST0001000100010001000F /* PBXTargetDependency */,
+			);
+			name = LivingTests;
+			productName = LivingTests;
+			productReference = TEST0001000100010001000C /* LivingTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -152,6 +225,7 @@
 			projectRoot = "";
 			targets = (
 				F59F5922C28E64FA4512D7A2 /* Living */,
+				TEST0001000100010001001A /* LivingTests */,
 			);
 		};
 /* End PBXProject section */
@@ -167,6 +241,14 @@
 				1E563019DA4CC0A605F69F02 /* LivingApp.swift in Sources */,
 				ED207EEE83F931B21C360DE2 /* SettingsView.swift in Sources */,
 				C6A5069ACC62E00D13AFDD37 /* UserData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		TEST0001000100010001001B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				TEST0001000100010001000A /* DateExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,7 +333,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.living.Living;
+				PRODUCT_BUNDLE_IDENTIFIER = com.living.app.dev;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -328,11 +410,43 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.living.Living;
+				PRODUCT_BUNDLE_IDENTIFIER = com.living.app.dev;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		TEST0001000100010001001E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.living.app.dev.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Living.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Living";
+			};
+			name = Debug;
+		};
+		TEST0001000100010001001F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.living.app.dev.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Living.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Living";
+			};
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -351,6 +465,15 @@
 			buildConfigurations = (
 				F88A052D6CF35BC3414BB816 /* Debug */,
 				BD3EE31C32C3972ED1674401 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		TEST0001000100010001001D /* Build configuration list for PBXNativeTarget "LivingTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				TEST0001000100010001001E /* Debug */,
+				TEST0001000100010001001F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -377,6 +500,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7A1B2C3D4E5F6789ABCDEF00 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A12643874985FF1D086AD14 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
 		12333CE3B5DFD14AAE102EA7 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8A12643874985FF1D086AD14 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

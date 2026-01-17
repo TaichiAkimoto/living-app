@@ -93,6 +93,13 @@ struct CheckInView: View {
 // MARK: - Date Extension
 extension Date {
     var relativeString: String {
+        let interval = Date().timeIntervalSince(self)
+
+        // 1分未満は「たった今」
+        if interval < 60 {
+            return "たった今"
+        }
+
         let formatter = RelativeDateTimeFormatter()
         formatter.locale = Locale(identifier: "ja_JP")
         formatter.unitsStyle = .full
