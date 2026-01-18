@@ -21,6 +21,7 @@
 		SPLASH0100010001000100AA /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SPLASH0100010001000100AB /* SplashView.swift */; };
 		ONBOARD0100010001000100AA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ONBOARD0100010001000100AB /* OnboardingView.swift */; };
 		TEST0001000100010001000A /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TEST0001000100010001000B /* DateExtensionTests.swift */; };
+		AUTHERR0100010001000100AA /* AuthErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AUTHERR0100010001000100AB /* AuthErrorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		ONBOARD0100010001000100AB /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		TEST0001000100010001000B /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
 		TEST0001000100010001000C /* LivingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LivingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AUTHERR0100010001000100AB /* AuthErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthErrorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 		93E2793F0B9268F16802CF3B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AUTHERR0100010001000100AB /* AuthErrorView.swift */,
 				DCFE8E380459C45A130FFE01 /* CheckInView.swift */,
 				7E111837E8199880BFD707DB /* CheckInViewModel.swift */,
 				ONBOARD0100010001000100AB /* OnboardingView.swift */,
@@ -245,6 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AUTHERR0100010001000100AA /* AuthErrorView.swift in Sources */,
 				C7FE6F4641FE517B4879F517 /* CheckInView.swift in Sources */,
 				B1B698E214E9925ACA2F197A /* CheckInViewModel.swift in Sources */,
 				A842A4BF3A6F978C598C1F59 /* FirebaseService.swift in Sources */,
