@@ -9,6 +9,8 @@ android/gradle/
 android/gradlew
 android/gradlew.bat
 android/local.properties
+android/keystore.properties
+android/app/keystore/
 
 # iOS
 ios/Living.xcodeproj/project.xcworkspace/xcshareddata/

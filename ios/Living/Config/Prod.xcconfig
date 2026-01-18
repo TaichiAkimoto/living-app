@@ -1,0 +1,4 @@
+// Prod environment configuration
+PRODUCT_BUNDLE_IDENTIFIER = com.living.app
+INFOPLIST_KEY_CFBundleDisplayName = 生きろ。
+FIREBASE_PLIST_DIR = Prod

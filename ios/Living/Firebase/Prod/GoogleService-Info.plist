@@ -2,19 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!--
-	PLACEHOLDER: Download from Firebase Console
-	Firebase Project: living-2b928
-	Bundle ID: com.living.app
-	-->
-	<key>CLIENT_ID</key>
-	<string>REPLACE_WITH_ACTUAL_VALUE</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>REPLACE_WITH_ACTUAL_VALUE</string>
 	<key>API_KEY</key>
-	<string>REPLACE_WITH_ACTUAL_VALUE</string>
+	<string>AIzaSyBynuXG_EWcP_vk3qINqXN0OjK7VWwYr1c</string>
 	<key>GCM_SENDER_ID</key>
-	<string>REPLACE_WITH_ACTUAL_VALUE</string>
+	<string>365668823316</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
@@ -22,18 +13,18 @@
 	<key>PROJECT_ID</key>
 	<string>living-2b928</string>
 	<key>STORAGE_BUCKET</key>
-	<string>living-2b928.appspot.com</string>
+	<string>living-2b928.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>REPLACE_WITH_ACTUAL_VALUE</string>
+	<string>1:365668823316:ios:ba8ae691a53c7bd8385201</string>
 </dict>
 </plist>
