@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.living.app.data.PreferencesManager
+import com.living.app.ui.AuthErrorScreen
 import com.living.app.ui.CheckInScreen
 import com.living.app.ui.OnboardingScreen
 import com.living.app.ui.SettingsScreen
@@ -23,13 +24,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val preferencesManager = PreferencesManager(this)
+        val app = LivingApplication.getInstance()
 
         setContent {
             LivingTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    var showSplash by remember { mutableStateOf(true) }
+                    var splashMinTimePassed by remember { mutableStateOf(false) }
                     var hasSeenOnboarding by remember {
                         mutableStateOf(preferencesManager.hasSeenOnboarding)
                     }
@@ -38,11 +40,16 @@ class MainActivity : ComponentActivity() {
                     }
                     var showSettings by remember { mutableStateOf(false) }
 
-                    // Splash timer
+                    val authState by app.authState.collectAsState()
+
+                    // Minimum splash time (2 seconds)
                     LaunchedEffect(Unit) {
-                        delay(2500)
-                        showSplash = false
+                        delay(2000)
+                        splashMinTimePassed = true
                     }
+
+                    // Show splash until min time passed AND auth is not loading
+                    val showSplash = !splashMinTimePassed || authState == AuthState.Loading
 
                     // Screen navigation
                     AnimatedVisibility(
@@ -59,6 +66,11 @@ class MainActivity : ComponentActivity() {
                         exit = fadeOut()
                     ) {
                         when {
+                            authState == AuthState.Failed -> {
+                                AuthErrorScreen(
+                                    onRetry = { app.retryAuth() }
+                                )
+                            }
                             !hasSeenOnboarding -> {
                                 OnboardingScreen(
                                     onComplete = {
