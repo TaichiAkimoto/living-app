@@ -1,1 +1,22 @@
+# Terraform
 firebase/.terraform/
+
+# Android
+android/.gradle/
+android/build/
+android/app/build/
+android/gradle/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+
+# iOS
+ios/Living.xcodeproj/project.xcworkspace/xcshareddata/
+ios/Living.xcodeproj/xcuserdata/
+*.xcuserstate
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
