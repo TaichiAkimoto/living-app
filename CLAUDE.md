@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-19 14:30
+**最終更新**: 2026-01-19 15:45
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -22,47 +22,40 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 - **ビルド確認済み**: Android prod release ✅ / iOS dev ✅
 - **iOS自動入力対応** (2026-01-19): SettingsViewにtextContentType追加
 - **アカウント調査完了** (2026-01-19): 使用可能なアカウント特定済み
+- **Apple ID作成** (2026-01-19): bodhy.akimoto@gmail.com
+- **Apple Developer Program 支払い完了** (2026-01-19): $99、注文番号 W1533090277
 
 ### 次にやること（次回セッション）
 
-**Claude in Chrome を使って iOS/Android 両方へリリース**
+1. **iOS: Apple Developer アクティベーション確認**
+   - ⏳ 最長48時間待ち（支払い完了済み）
+   - アクティブになったら → App Store Connect でアプリ登録
+   - Xcode Archive → アップロード → 審査提出
 
-1. **Google Play Console** - bodhy.akimoto@gmail.com で新規登録 ($25)
-   - 個人用アカウントを選択
-   - デベロッパー登録完了 → AABアップロード → 審査提出
-
-2. **Apple Developer Program** - bodhy.akimoto@gmail.com で新規登録 ($99)
-   - Apple ID作成が必要（まだ存在しない）
-   - Developer Program登録 → Xcode Archive → App Store Connect提出
-
-### アカウント調査結果 (2026-01-19)
-
-| アカウント | Google Play | Apple Developer |
-|-----------|-------------|-----------------|
-| italyitalienitalia@gmail.com | ❌ 閉鎖 (2025/3) | ❌ 別組織に紐づけ |
-| akimoto@slang-y.com | ❌ 閉鎖 (2025/6) | ⏰ 期限切れ（更新可$99） |
-| akimototaichi@gmail.com | 🔄 登録途中 | ❌ 別組織に紐づけ |
-| **bodhy.akimoto@gmail.com** | ✅ **新規登録可** ($25) | ✅ **新規登録可** ($99) |
-
-**決定**: `bodhy.akimoto@gmail.com` を iOS/Android 両方で使用
+2. **Android: Google Play Console 登録完了** ($25未払い)
+   - デベロッパー名: Taichi A.（設定済み）
+   - お支払いプロファイル作成（国：日本）
+   - $25 支払い → AABアップロード → 審査提出
 
 ### ストア登録状況
 
-#### Google Play Console
-- **使用アカウント**: bodhy.akimoto@gmail.com（新規登録）
-- **費用**: $25（一回払い）
-- **状態**: 🔜 次回セッションで登録開始
+#### Apple Developer Program ✅ 支払い完了
+- **使用アカウント**: bodhy.akimoto@gmail.com
+- **費用**: $99（年払い）✅ 支払済
+- **注文番号**: W1533090277
+- **状態**: ⏳ アクティベーション待ち（最長48時間）
 
-#### Apple Developer Program
-- **使用アカウント**: bodhy.akimoto@gmail.com（新規Apple ID作成から）
-- **費用**: $99（年払い）
-- **状態**: 🔜 次回セッションで登録開始
+#### Google Play Console 🔄 登録途中
+- **使用アカウント**: bodhy.akimoto@gmail.com
+- **デベロッパー名**: Taichi A.
+- **費用**: $25（一回払い）❌ 未払い
+- **状態**: お支払いプロファイル作成 → 支払いが必要
 
 #### 登録費用合計
-| プラットフォーム | 費用 | 支払い |
-|-----------------|------|--------|
-| Google Play | $25 | 一回払い |
-| Apple Developer | $99 | 年払い |
+| プラットフォーム | 費用 | 状態 |
+|-----------------|------|------|
+| Apple Developer | $99 | ✅ 支払済 |
+| Google Play | $25 | ❌ 未払い |
 | **合計** | **$124** | |
 
 ### iOS署名設定（開発用）
