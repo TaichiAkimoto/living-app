@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-19
+**最終更新**: 2026-01-19 14:30
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -18,61 +18,52 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
   - チェックイン成功時の波動アニメーション
   - アプリアイコン（◯───◯モチーフ）
 - **アプリ名変更**: Living → 「生きろ。」
-- **認証リトライ＆エラー画面** (2026-01-18):
-  - iOS/Android両方で認証失敗時のリトライロジック実装
-  - 指数バックオフ (1s→2s→4s)、最大3回
-  - エラー画面追加（グレー2点 + 再試行ボタン）
-- **ビルド確認済み**:
-  - Android prod release: ✅ BUILD SUCCESSFUL
-  - iOS dev (署名設定済み): ✅ Personal Team設定完了
-- **Google Play Console 返金依頼送信済み** (2026-01-18):
-  - 旧アカウント（italyitalienitalia@gmail.com）は非アクティブで閉鎖済み
-  - 登録料$25が2回課金（$50）→ 重複課金分の返金依頼をGoogleサポートに送信
-- **新メールアドレス作成済み**: akimototaichi@gmail.com（iOS/Android両方で使用予定）
+- **認証リトライ＆エラー画面** (2026-01-18)
+- **ビルド確認済み**: Android prod release ✅ / iOS dev ✅
+- **iOS自動入力対応** (2026-01-19): SettingsViewにtextContentType追加
+- **アカウント調査完了** (2026-01-19): 使用可能なアカウント特定済み
 
-### 進行中 (2026-01-19)
+### 次にやること（次回セッション）
 
-#### Google Play Console 登録 - 一時停止中
-- **ブラウザタブ**: 「あなたの情報」ページで停止中（Chromeタブを保持）
-- **完了したステップ**:
-  1. ✅ akimototaichi@gmail.com でログイン
-  2. ✅ 2段階認証を有効化
-  3. ✅ 個人用アカウントを選択
-  4. ✅ デベロッパー名: "Taichi A."
-  5. ✅ お支払いプロファイルをリンク（住所更新済み）
-  6. ✅ 公開デベロッパープロフィール設定
-  7. ✅ 公開メールアドレス: akimototaichi@gmail.com（検証済み）
-  8. 🔄 「あなたの情報」ページ入力中 → ここで一時停止
-- **残りのステップ**: アプリ、Googleからの連絡方法、利用規約、$25支払い
-- **再開方法**: Chromeタブが開いたまま → 「次へ」で続行可能
+**Claude in Chrome を使って iOS/Android 両方へリリース**
 
-### 次にやること
-1. **Apple Developer Program 登録可否を調査**（akimototaichi@gmail.comで）
-2. Google Play Console 登録を完了（$25支払い）
-3. Apple Developer Program 登録（$99/年）
-4. AAB (Android App Bundle) ビルド: `./gradlew bundleProdRelease`
-5. Google Play Console でアプリ作成・審査提出
-6. Xcode Archive → App Store Connect 審査提出
+1. **Google Play Console** - bodhy.akimoto@gmail.com で新規登録 ($25)
+   - 個人用アカウントを選択
+   - デベロッパー登録完了 → AABアップロード → 審査提出
+
+2. **Apple Developer Program** - bodhy.akimoto@gmail.com で新規登録 ($99)
+   - Apple ID作成が必要（まだ存在しない）
+   - Developer Program登録 → Xcode Archive → App Store Connect提出
+
+### アカウント調査結果 (2026-01-19)
+
+| アカウント | Google Play | Apple Developer |
+|-----------|-------------|-----------------|
+| italyitalienitalia@gmail.com | ❌ 閉鎖 (2025/3) | ❌ 別組織に紐づけ |
+| akimoto@slang-y.com | ❌ 閉鎖 (2025/6) | ⏰ 期限切れ（更新可$99） |
+| akimototaichi@gmail.com | 🔄 登録途中 | ❌ 別組織に紐づけ |
+| **bodhy.akimoto@gmail.com** | ✅ **新規登録可** ($25) | ✅ **新規登録可** ($99) |
+
+**決定**: `bodhy.akimoto@gmail.com` を iOS/Android 両方で使用
 
 ### ストア登録状況
 
-**新アカウント**: akimototaichi@gmail.com（iOS/Android両方で使用）
-
 #### Google Play Console
-- **旧アカウント**: italyitalienitalia@gmail.com → 2025年3月閉鎖
-- **問題**: 同じメールでの再登録不可（Googleポリシー）
-- **状態**: 🔄 登録進行中（一時停止）
+- **使用アカウント**: bodhy.akimoto@gmail.com（新規登録）
+- **費用**: $25（一回払い）
+- **状態**: 🔜 次回セッションで登録開始
 
 #### Apple Developer Program
-- **旧アカウント**: italyitalienitalia@gmail.com → 別組織のaccount holderエラー
-- **問題**: 既存の組織に紐づいているため使用不可
-- **状態**: 📋 登録可否を調査中
+- **使用アカウント**: bodhy.akimoto@gmail.com（新規Apple ID作成から）
+- **費用**: $99（年払い）
+- **状態**: 🔜 次回セッションで登録開始
 
-#### 登録費用
+#### 登録費用合計
 | プラットフォーム | 費用 | 支払い |
 |-----------------|------|--------|
 | Google Play | $25 | 一回払い |
 | Apple Developer | $99 | 年払い |
+| **合計** | **$124** | |
 
 ### iOS署名設定（開発用）
 - Team: 太一 稀元 (Personal Team)

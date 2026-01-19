@@ -46,6 +46,7 @@ struct SettingsView: View {
 
                                 TextField("", text: $name)
                                     .textFieldStyle(SystemTextFieldStyle())
+                                    .textContentType(.name)
                                     .autocorrectionDisabled()
                             }
 
@@ -64,6 +65,7 @@ struct SettingsView: View {
 
                                     TextField("", text: $emergencyContactName)
                                         .textFieldStyle(SystemTextFieldStyle())
+                                        .textContentType(.name)
                                         .autocorrectionDisabled()
                                 }
 
@@ -74,6 +76,7 @@ struct SettingsView: View {
 
                                     TextField("", text: $emergencyContactEmail)
                                         .textFieldStyle(SystemTextFieldStyle())
+                                        .textContentType(.emailAddress)
                                         .keyboardType(.emailAddress)
                                         .textInputAutocapitalization(.never)
                                         .autocorrectionDisabled()
