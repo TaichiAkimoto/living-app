@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-19 19:30
+**最終更新**: 2026-01-20
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -23,13 +23,13 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 - **iOS自動入力対応** (2026-01-19): SettingsViewにtextContentType追加
 - **アカウント調査完了** (2026-01-19): 使用可能なアカウント特定済み
 - **Apple ID作成** (2026-01-19): bodhy.akimoto@gmail.com
-- **Apple Developer Program 支払い完了** (2026-01-19): $99、注文番号 W1533090277
+- **Apple Developer Program 支払い完了** (2026-01-19): $99、注文番号 W1533090277（アクティベーション保留中）
 - **Google Play Console 重複課金返金依頼送信** (2026-01-19): フォーム送信完了
 
 ### 次にやること（次回セッション）
 
-1. **iOS: Apple Developer アクティベーション確認**
-   - ⏳ 最長48時間待ち（支払い完了済み）
+1. **iOS: Apple Developer アクティベーション待ち**
+   - ⏳ 保留中（Appleによる審査中、最長48時間）
    - アクティブになったら → App Store Connect でアプリ登録
    - Xcode Archive → アップロード → 審査提出
 
@@ -39,11 +39,11 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ### ストア登録状況
 
-#### Apple Developer Program ✅ 支払い完了
+#### Apple Developer Program ⏳ 保留中
 - **使用アカウント**: bodhy.akimoto@gmail.com
 - **費用**: $99（年払い）✅ 支払済
 - **注文番号**: W1533090277
-- **状態**: ⏳ アクティベーション待ち（最長48時間）
+- **状態**: ⏳ 保留中（Appleによる審査中、最長48時間）
 
 #### Google Play Console 🔄 登録途中
 - **使用アカウント**: bodhy.akimoto@gmail.com
