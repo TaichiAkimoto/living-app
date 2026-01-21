@@ -1,4 +1,6 @@
 // Prod environment configuration
-PRODUCT_BUNDLE_IDENTIFIER = com.living.app
+PRODUCT_BUNDLE_IDENTIFIER = com.taichiakimoto.living
 INFOPLIST_KEY_CFBundleDisplayName = 生きろ。
 FIREBASE_PLIST_DIR = Prod
+MARKETING_VERSION = 1.0.0
+CURRENT_PROJECT_VERSION = 1

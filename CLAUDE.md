@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-20
+**最終更新**: 2026-01-21
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -23,27 +23,54 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 - **iOS自動入力対応** (2026-01-19): SettingsViewにtextContentType追加
 - **アカウント調査完了** (2026-01-19): 使用可能なアカウント特定済み
 - **Apple ID作成** (2026-01-19): bodhy.akimoto@gmail.com
-- **Apple Developer Program 支払い完了** (2026-01-19): $99、注文番号 W1533090277（アクティベーション保留中）
+- **Apple Developer Program** (2026-01-21): ✅ アクティベーション完了
+- **App Store Connect アプリ登録** (2026-01-21):
+  - App ID: 6758099608
+  - Bundle ID: `com.taichiakimoto.living`（`com.living.app`は使用不可だった）
+  - アプリ名: 生きろ。
+  - SKU: com-living-app
+- **App Store Connect メタデータ入力** (2026-01-21):
+  - 説明文、キーワード、サポートURL ✅
+  - プライバシーポリシーURL: https://taichiakimoto.github.io/living-app/privacy-policy ✅
+  - プライバシー設定（データ収集）公開 ✅
+  - 著作権、App Review連絡先 ✅
+- **スクリーンショット撮影** (2026-01-21):
+  - iPhone 16 Pro Max (6.7"): `screenshots/iphone_6_7_checkin.png` (1320x2868)
+  - iPhone 16 Plus (6.5"): `screenshots/iphone_6_5_checkin.png` (1290x2796)
 - **Google Play Console 重複課金返金依頼送信** (2026-01-19): フォーム送信完了
 
 ### 次にやること（次回セッション）
 
-1. **iOS: Apple Developer アクティベーション待ち**
-   - ⏳ 保留中（Appleによる審査中、最長48時間）
-   - アクティブになったら → App Store Connect でアプリ登録
-   - Xcode Archive → アップロード → 審査提出
+1. **iOS: スクリーンショットアップロード（手動）**
+   - App Store Connectでスクリーンショットをドラッグ&ドロップ
+   - ブラウザセキュリティ制限により自動化不可
+   - ファイル: `/Users/taichi/Development/Living/screenshots/`
 
-2. **Android: Google Play Console 登録完了**
-   - 重複課金返金依頼送信済み → 返信待ち（2営業日以内）
+2. **iOS: Xcodeアーカイブ & アップロード**
+   - Xcode → Product → Archive
+   - Organizer → Distribute App → App Store Connect
+   - Bundle ID: `com.taichiakimoto.living`
+
+3. **iOS: 審査提出**
+   - App Store Connectでビルド選択 → 審査に提出
+
+4. **Android: Google Play Console 登録完了**
+   - 重複課金返金依頼送信済み → 返信待ち
    - 返金確認後、正規の$25を支払い → AABアップロード → 審査提出
 
 ### ストア登録状況
 
-#### Apple Developer Program ⏳ 保留中
+#### Apple Developer Program ✅ アクティブ
 - **使用アカウント**: bodhy.akimoto@gmail.com
 - **費用**: $99（年払い）✅ 支払済
 - **注文番号**: W1533090277
-- **状態**: ⏳ 保留中（Appleによる審査中、最長48時間）
+- **状態**: ✅ アクティベーション完了
+
+#### App Store Connect 🔄 提出準備中
+- **App ID**: 6758099608
+- **Bundle ID**: `com.taichiakimoto.living`
+- **バージョン**: 1.0.0
+- **状態**: 提出準備中（スクリーンショット＆ビルドアップロード待ち）
 
 #### Google Play Console 🔄 登録途中
 - **使用アカウント**: bodhy.akimoto@gmail.com
