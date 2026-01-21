@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-21
+**最終更新**: 2026-01-21 23:20
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -38,18 +38,26 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
   - iPhone 16 Pro Max (6.7"): `screenshots/iphone_6_7_checkin.png` (1320x2868)
   - iPhone 16 Plus (6.5"): `screenshots/iphone_6_5_checkin.png` (1290x2796)
 - **Google Play Console 重複課金返金依頼送信** (2026-01-19): フォーム送信完了
+- **Apple Distribution証明書** (2026-01-21): ✅ 作成＆インストール完了
+  - Certificate Name: Taichi Akimoto
+  - Certificate Type: Distribution
+  - Team ID: N87AGP76YT
+  - 有効期限: 2027/01/21
+- **Xcode署名設定更新** (2026-01-21): DEVELOPMENT_TEAM = N87AGP76YT に変更済み
 
 ### 次にやること（次回セッション）
 
-1. **iOS: スクリーンショットアップロード（手動）**
-   - App Store Connectでスクリーンショットをドラッグ&ドロップ
-   - ブラウザセキュリティ制限により自動化不可
-   - ファイル: `/Users/taichi/Development/Living/screenshots/`
+1. **iOS: スクリーンショット撮り直し** ⚠️
+   - 現在のスクリーンショット (1290×2796) はApp Store Connectで受け入れられない
+   - 必要なサイズ: 1242×2688 または 1284×2778（6.5インチ用）
+   - iPhone 14 Plus (1284×2778) のシミュレータをインストールして撮り直す
+   - または、古いiOSランタイムをダウンロードして対応するシミュレータを使用
 
 2. **iOS: Xcodeアーカイブ & アップロード**
    - Xcode → Product → Archive
    - Organizer → Distribute App → App Store Connect
    - Bundle ID: `com.taichiakimoto.living`
+   - Distribution証明書: Apple Distribution: Taichi Akimoto (N87AGP76YT) ✅
 
 3. **iOS: 審査提出**
    - App Store Connectでビルド選択 → 審査に提出
@@ -87,11 +95,19 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 | Google Play | $25 | ❌ 未払い |
 | **合計** | **$124** | |
 
-### iOS署名設定（開発用）
+### iOS署名設定
+
+#### 開発用 (dev)
 - Team: 太一 稀元 (Personal Team)
-- Bundle ID: `com.living.app.dev`（dev環境）
+- Bundle ID: `com.living.app.dev`
 - Signing Certificate: Apple Development: italyitalienitalia@gmail.com
 - 初回実機インストール時: 設定 > 一般 > VPNとデバイス管理 から信頼が必要
+
+#### App Store配布用 (prod) ✅ 設定完了
+- Team: Taichi Akimoto (N87AGP76YT)
+- Bundle ID: `com.taichiakimoto.living`
+- Signing Certificate: Apple Distribution: Taichi Akimoto (N87AGP76YT)
+- XcodeのDEVELOPMENT_TEAM: N87AGP76YT（project.pbxprojで設定済み）
 
 ### 既知の問題
 - 設定画面の「始める」ボタンを押しても反応しない場合がある
