@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-22 11:30
+**最終更新**: 2026-01-22 13:30
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -44,14 +44,22 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 - **スクリーンショット自動撮影** (2026-01-22): ✅ 全20枚撮影完了
   - AXe CLI（`brew install cameroncooke/axe/axe`）でシミュレーター自動操作
   - 4デバイス × 5画面 = 20枚
+- **App Store Connect スクリーンショットアップロード** (2026-01-22): ✅ 完了
+  - 6.9インチディスプレイ用 5枚アップロード済み
+  - Claude in Chrome でブラウザ操作して実施
 
 ### 次にやること（次回セッション）
 
-1. **iOS: App Store Connectにスクリーンショットアップロード**
-   - 6.9インチ用: `screenshots/iPhone_16_Pro_Max/` (1320x2868) ← **必須**
-   - 他サイズはオプション
+1. **iOS: Xcode Team設定の問題を解決**
+   - **問題**: Xcode Settings → Accounts に bodhy.akimoto@gmail.com は追加済み
+   - **問題**: しかしプロジェクトの Signing & Capabilities で Team ドロップダウンに表示されない
+   - **試すこと**:
+     - Xcodeを完全に終了して再起動
+     - DerivedData削除: `rm -rf ~/Library/Developer/Xcode/DerivedData/Living-*`
+     - Xcode Settings → Accounts でアカウントを一度削除して再追加
+     - 参考: https://developer.apple.com/forums/ でTeam表示問題を検索
 
-2. **iOS: Xcodeアーカイブ & アップロード**
+2. **iOS: Xcodeアーカイブ & アップロード**（Team問題解決後）
    - Xcode → Product → Archive
    - Organizer → Distribute App → App Store Connect
    - Bundle ID: `com.taichiakimoto.living`
@@ -92,7 +100,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 - **App ID**: 6758099608
 - **Bundle ID**: `com.taichiakimoto.living`
 - **バージョン**: 1.0.0
-- **状態**: 提出準備中（スクリーンショット＆ビルドアップロード待ち）
+- **状態**: スクリーンショット ✅ / ビルドアップロード待ち
 
 #### Google Play Console 🔄 登録途中
 - **使用アカウント**: bodhy.akimoto@gmail.com
