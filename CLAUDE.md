@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-21 23:20
+**最終更新**: 2026-01-22 11:30
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -34,9 +34,6 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
   - プライバシーポリシーURL: https://taichiakimoto.github.io/living-app/privacy-policy ✅
   - プライバシー設定（データ収集）公開 ✅
   - 著作権、App Review連絡先 ✅
-- **スクリーンショット撮影** (2026-01-21):
-  - iPhone 16 Pro Max (6.7"): `screenshots/iphone_6_7_checkin.png` (1320x2868)
-  - iPhone 16 Plus (6.5"): `screenshots/iphone_6_5_checkin.png` (1290x2796)
 - **Google Play Console 重複課金返金依頼送信** (2026-01-19): フォーム送信完了
 - **Apple Distribution証明書** (2026-01-21): ✅ 作成＆インストール完了
   - Certificate Name: Taichi Akimoto
@@ -44,14 +41,15 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
   - Team ID: N87AGP76YT
   - 有効期限: 2027/01/21
 - **Xcode署名設定更新** (2026-01-21): DEVELOPMENT_TEAM = N87AGP76YT に変更済み
+- **スクリーンショット自動撮影** (2026-01-22): ✅ 全20枚撮影完了
+  - AXe CLI（`brew install cameroncooke/axe/axe`）でシミュレーター自動操作
+  - 4デバイス × 5画面 = 20枚
 
 ### 次にやること（次回セッション）
 
-1. **iOS: スクリーンショット撮り直し** ⚠️
-   - 現在のスクリーンショット (1290×2796) はApp Store Connectで受け入れられない
-   - 必要なサイズ: 1242×2688 または 1284×2778（6.5インチ用）
-   - iPhone 14 Plus (1284×2778) のシミュレータをインストールして撮り直す
-   - または、古いiOSランタイムをダウンロードして対応するシミュレータを使用
+1. **iOS: App Store Connectにスクリーンショットアップロード**
+   - 6.9インチ用: `screenshots/iPhone_16_Pro_Max/` (1320x2868) ← **必須**
+   - 他サイズはオプション
 
 2. **iOS: Xcodeアーカイブ & アップロード**
    - Xcode → Product → Archive
@@ -65,6 +63,22 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 4. **Android: Google Play Console 登録完了**
    - 重複課金返金依頼送信済み → 返信待ち
    - 返金確認後、正規の$25を支払い → AABアップロード → 審査提出
+
+### スクリーンショット（2026-01-22撮影）
+
+| デバイス | 解像度 | App Store要件 | 場所 |
+|---------|--------|---------------|------|
+| iPhone 16 Pro Max | 1320 x 2868 | 6.9インチ ✅ | `screenshots/iPhone_16_Pro_Max/` |
+| iPhone 16 Plus | 1290 x 2796 | 6.9インチ ✅ | `screenshots/iPhone_16_Plus/` |
+| iPhone 16 Pro | 1206 x 2622 | 6.3インチ ✅ | `screenshots/iPhone_16_Pro/` |
+| iPhone 16 | 1179 x 2556 | 6.3インチ ✅ | `screenshots/iPhone_16/` |
+
+**各フォルダの内容（5枚）:**
+- `onboarding_1.png` - 「毎日タップするだけ」
+- `onboarding_2.png` - 「2日間忘れると通知」
+- `onboarding_3.png` - 「大切な人に届く」
+- `settings.png` - 設定画面
+- `checkin.png` - チェックイン画面
 
 ### ストア登録状況
 
