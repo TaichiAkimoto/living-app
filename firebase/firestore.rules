@@ -3,7 +3,18 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // users: Anonymous Auth UID でスコープ制限
     match /users/{deviceId} {
-      allow read, write: if request.auth != null && request.auth.uid == deviceId;
+      // 読み取り: 本人のみ
+      allow read: if request.auth != null && request.auth.uid == deviceId;
+
+      // 作成: 本人のみ、初期フィールドのみ
+      allow create: if request.auth != null
+        && request.auth.uid == deviceId
+        && isValidUserCreate();
+
+      // 更新: 本人のみ、許可されたフィールドのみ
+      allow update: if request.auth != null
+        && request.auth.uid == deviceId
+        && isValidUserUpdate();
     }
 
     // notificationLogs: Cloud Functions専用（クライアントからはアクセス不可）
@@ -11,4 +22,79 @@ service cloud.firestore {
       allow read, write: if false;
     }
   }
+}
+
+// ユーザー作成時の検証
+function isValidUserCreate() {
+  let data = request.resource.data;
+
+  return (
+    // 必須フィールド
+    data.keys().hasAll(['name', 'emergencyContactName', 'emergencyContactEmail', 'lastCheckIn', 'createdAt'])
+
+    // name は 1〜50文字
+    && data.name is string
+    && data.name.size() >= 1
+    && data.name.size() <= 50
+
+    // emergencyContactName は 1〜50文字
+    && data.emergencyContactName is string
+    && data.emergencyContactName.size() >= 1
+    && data.emergencyContactName.size() <= 50
+
+    // emergencyContactEmail はメール形式
+    && data.emergencyContactEmail is string
+    && data.emergencyContactEmail.matches('.*@.*')
+
+    // lastCheckIn は timestamp
+    && data.lastCheckIn is timestamp
+
+    // createdAt は timestamp
+    && data.createdAt is timestamp
+
+    // notified はデフォルト false (オプション)
+    && (!data.keys().hasAny(['notified']) || data.notified == false)
+
+    // notifiedAt は作成時に存在しない
+    && !data.keys().hasAny(['notifiedAt'])
+  );
+}
+
+// ユーザー更新時の検証
+function isValidUserUpdate() {
+  let data = request.resource.data;
+  let existingData = resource.data;
+
+  // 更新されるフィールドを取得
+  let changedKeys = data.diff(existingData).changedKeys();
+
+  // クライアントが更新可能なフィールド
+  let allowedFields = ['name', 'emergencyContactName', 'emergencyContactEmail', 'lastCheckIn'].toSet();
+
+  // サーバー専用フィールド（クライアントは変更不可）
+  let serverOnlyFields = ['notified', 'notifiedAt', 'createdAt'].toSet();
+
+  return (
+    // サーバー専用フィールドを変更していない
+    !changedKeys.hasAny(serverOnlyFields)
+
+    // 変更しているフィールドが許可されたフィールドのみ
+    && changedKeys.hasOnly(allowedFields)
+
+    // name は 1〜50文字（変更される場合）
+    && (!changedKeys.hasAny(['name']) ||
+        (data.name is string && data.name.size() >= 1 && data.name.size() <= 50))
+
+    // emergencyContactName は 1〜50文字（変更される場合）
+    && (!changedKeys.hasAny(['emergencyContactName']) ||
+        (data.emergencyContactName is string && data.emergencyContactName.size() >= 1 && data.emergencyContactName.size() <= 50))
+
+    // emergencyContactEmail はメール形式（変更される場合）
+    && (!changedKeys.hasAny(['emergencyContactEmail']) ||
+        (data.emergencyContactEmail is string && data.emergencyContactEmail.matches('.*@.*')))
+
+    // lastCheckIn は timestamp（変更される場合）
+    && (!changedKeys.hasAny(['lastCheckIn']) ||
+        data.lastCheckIn is timestamp)
+  );
 }

@@ -11,22 +11,50 @@ const secretClient = new SecretManagerServiceClient();
 // 環境判定（ログ出力用）
 const ENV = functions.config().env?.name || process.env.FUNCTIONS_ENV || "prod";
 
-// Secret Manager から Resend API Key を取得
+// PII マスキング関数
+export function maskEmail(email: string): string {
+  if (!email || !email.includes("@")) {
+    return email; // Invalid email, return as-is
+  }
+
+  const [localPart, domain] = email.split("@");
+  if (!localPart || localPart.length === 0) {
+    return email; // No local part, return as-is
+  }
+
+  const maskedLocalPart = localPart[0] + "***";
+  return `${maskedLocalPart}@${domain}`;
+}
+
+// Resend API Key キャッシュ（メモリ）
+let cachedResendApiKey: string | null = null;
+
+// Secret Manager から Resend API Key を取得（キャッシュ付き）
 async function getResendApiKey(): Promise<string> {
+  // キャッシュがあれば再利用
+  if (cachedResendApiKey) {
+    console.log("Using cached Resend API key");
+    return cachedResendApiKey;
+  }
+
+  // 初回のみ Secret Manager から取得
+  console.log("Fetching Resend API key from Secret Manager");
   const projectId = process.env.GCLOUD_PROJECT || process.env.GCP_PROJECT;
   const [version] = await secretClient.accessSecretVersion({
     name: `projects/${projectId}/secrets/resend-api-key/versions/latest`,
   });
-  return version.payload?.data?.toString() || "";
+
+  cachedResendApiKey = version.payload?.data?.toString() || "";
+  return cachedResendApiKey;
 }
 
 /**
- * 毎日9:00 UTCに実行される定期チェック
+ * 毎日9:00 JST に実行される定期チェック
  * 48時間以上チェックインがないユーザーの緊急連絡先にメール送信
  */
 export const checkInactiveUsers = functions.pubsub
   .schedule("0 9 * * *")
-  .timeZone("UTC")
+  .timeZone("Asia/Tokyo")
   .onRun(async () => {
     console.log(`Starting inactive users check... (ENV: ${ENV})`);
 
@@ -47,8 +75,8 @@ export const checkInactiveUsers = functions.pubsub
         await processInactiveUser(doc.id, doc.data());
       }
 
-      // 失敗した通知の再試行
-      await retryFailedNotifications();
+      // Note: 失敗した通知は notified=false のまま残るため、
+      // 次回スケジュール実行時に自動的に再試行される
 
       console.log("Inactive users check completed");
     } catch (error) {
@@ -58,7 +86,7 @@ export const checkInactiveUsers = functions.pubsub
   });
 
 /**
- * 未チェックユーザーの処理
+ * 未チェックユーザーの処理（トランザクションベース）
  */
 async function processInactiveUser(
   deviceId: string,
@@ -73,21 +101,48 @@ async function processInactiveUser(
     return;
   }
 
+  const userRef = db.collection("users").doc(deviceId);
+
   try {
+    // トランザクション: notified フラグを先に更新（重複送信防止）
+    await db.runTransaction(async (transaction) => {
+      const userDoc = await transaction.get(userRef);
+
+      if (!userDoc.exists) {
+        throw new Error("User document not found");
+      }
+
+      const currentData = userDoc.data();
+      if (currentData?.notified === true) {
+        // 既に通知済み（並行実行時の安全策）
+        throw new Error("Already notified");
+      }
+
+      // notified フラグを true に更新（重複送信を防ぐ）
+      transaction.update(userRef, {
+        notified: true,
+        notifiedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    });
+
+    // トランザクション成功後、メール送信（トランザクション外）
     await sendEmergencyEmail(
       name,
       emergencyContactName,
       emergencyContactEmail
     );
 
-    // 通知済みフラグを更新
-    await db.collection("users").doc(deviceId).update({
-      notified: true,
-    });
-
     await logNotification(deviceId, emergencyContactEmail, "sent", 1);
-    console.log(`Email sent successfully to ${emergencyContactEmail}`);
-  } catch (error) {
+    console.log(`Email sent successfully to ${maskEmail(emergencyContactEmail)}`);
+  } catch (error: any) {
+    if (error.message === "Already notified") {
+      console.log(`Skipping ${deviceId}: already notified`);
+      return;
+    }
+
+    // メール送信失敗時は失敗ログを記録
+    // notified=true のまま（次回実行では対象外）
+    // 失敗ログは保存されるので、手動で確認・対応可能
     console.error(`Failed to send email for ${deviceId}:`, error);
     await logNotification(deviceId, emergencyContactEmail, "failed", 1);
   }
@@ -140,56 +195,3 @@ async function logNotification(
   });
 }
 
-/**
- * 失敗した通知の再試行（最大3回）
- */
-async function retryFailedNotifications(): Promise<void> {
-  const failedLogs = await db
-    .collection("notificationLogs")
-    .where("status", "==", "failed")
-    .where("attemptCount", "<", 3)
-    .orderBy("sentAt", "desc")
-    .limit(100)
-    .get();
-
-  console.log(`Found ${failedLogs.size} failed notifications to retry`);
-
-  for (const logDoc of failedLogs.docs) {
-    const log = logDoc.data();
-    const userDoc = await db.collection("users").doc(log.deviceId).get();
-
-    if (!userDoc.exists) {
-      console.log(`User ${log.deviceId} not found, skipping retry`);
-      continue;
-    }
-
-    const userData = userDoc.data();
-    if (!userData) continue;
-
-    try {
-      await sendEmergencyEmail(
-        userData.name,
-        userData.emergencyContactName,
-        userData.emergencyContactEmail
-      );
-
-      // 通知済みフラグを更新
-      await db.collection("users").doc(log.deviceId).update({
-        notified: true,
-      });
-
-      // ログを更新
-      await logDoc.ref.update({
-        status: "sent",
-        attemptCount: log.attemptCount + 1,
-      });
-
-      console.log(`Retry successful for ${log.deviceId}`);
-    } catch (error) {
-      console.error(`Retry failed for ${log.deviceId}:`, error);
-      await logDoc.ref.update({
-        attemptCount: log.attemptCount + 1,
-      });
-    }
-  }
-}

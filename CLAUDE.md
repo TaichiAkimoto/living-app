@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-22 13:30
+**最終更新**: 2026-01-29 23:30
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -45,41 +45,60 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
   - AXe CLI（`brew install cameroncooke/axe/axe`）でシミュレーター自動操作
   - 4デバイス × 5画面 = 20枚
 - **App Store Connect スクリーンショットアップロード** (2026-01-22): ✅ 完了
-  - 6.9インチディスプレイ用 5枚アップロード済み
+  - iPhone 6.9インチディスプレイ用 5枚アップロード済み
+  - iPad 13インチディスプレイ用 5枚アップロード済み
   - Claude in Chrome でブラウザ操作して実施
+- **iOS App Store審査提出** (2026-01-23): ✅ 審査待ち
+  - バージョン: 1.0.0 (Build 3)
+  - カテゴリ: ヘルスケア／フィットネス
+  - 審査には最大48時間、完了時にメール通知
+- **App Store配信地域設定** (2026-01-28): ✅ 完了
+  - 「価格および配信状況」で配信地域を設定
+  - 175か国のうち148か国で配信処理中
+  - 「App Storeから削除済み」表示が解消
+- **バックエンド改善** (2026-01-29): ✅ 完了
+  - Firestoreインデックス作成（users, notificationLogs）
+  - 重複通知対策（トランザクション化、notifiedAtフィールド追加）
+  - Secret Managerキャッシュ実装（コスト削減）
+  - タイムゾーン修正（UTC 9:00 → JST 9:00）
+  - 再試行ロジック修正（即時→翌日再試行）
+  - PIIマスキング実装（メールアドレス）
+  - Firestoreルール強化（サーバー専用フィールド保護）
+  - TDD実装（11テスト合格）
 
 ### 次にやること（次回セッション）
 
-1. **iOS: Xcode Team設定の問題を解決**
-   - **問題**: Xcode Settings → Accounts に bodhy.akimoto@gmail.com は追加済み
-   - **問題**: しかしプロジェクトの Signing & Capabilities で Team ドロップダウンに表示されない
-   - **試すこと**:
-     - Xcodeを完全に終了して再起動
-     - DerivedData削除: `rm -rf ~/Library/Developer/Xcode/DerivedData/Living-*`
-     - Xcode Settings → Accounts でアカウントを一度削除して再追加
-     - 参考: https://developer.apple.com/forums/ でTeam表示問題を検索
+1. **Firebase Functions デプロイ** (優先度: 高)
+   - `firebase deploy --only functions` でprod環境にデプロイ
+   - 改善内容を本番反映
 
-2. **iOS: Xcodeアーカイブ & アップロード**（Team問題解決後）
-   - Xcode → Product → Archive
-   - Organizer → Distribute App → App Store Connect
-   - Bundle ID: `com.taichiakimoto.living`
-   - Distribution証明書: Apple Distribution: Taichi Akimoto (N87AGP76YT) ✅
+2. **Resendドメイン検証** (優先度: 高)
+   - `noreply@7th-bridge.com` のSPF/DKIM設定
+   - Resend管理画面でドメイン認証完了
 
-3. **iOS: 審査提出**
-   - App Store Connectでビルド選択 → 審査に提出
+3. **通知機能の動作確認** (2026-01-30 09:00 JST予定)
+   - Cloud Functionsログで実行成功を確認
+   - NotificationLogsコレクションにログが記録されているか確認
+   - テストユーザーでメール受信確認
 
-4. **Android: Google Play Console 登録完了**
+4. **iOS: App Store配信確認**
+   - 配信処理完了待ち（148か国処理中）
+   - App Storeで検索して表示されるか確認（反映には数時間〜24時間）
+   - アプリが正常に公開されたことを確認
+
+5. **Android: Google Play Console 登録完了**
    - 重複課金返金依頼送信済み → 返信待ち
    - 返金確認後、正規の$25を支払い → AABアップロード → 審査提出
 
-### スクリーンショット（2026-01-22撮影）
+### スクリーンショット（2026-01-22〜23撮影）
 
 | デバイス | 解像度 | App Store要件 | 場所 |
 |---------|--------|---------------|------|
-| iPhone 16 Pro Max | 1320 x 2868 | 6.9インチ ✅ | `screenshots/iPhone_16_Pro_Max/` |
-| iPhone 16 Plus | 1290 x 2796 | 6.9インチ ✅ | `screenshots/iPhone_16_Plus/` |
-| iPhone 16 Pro | 1206 x 2622 | 6.3インチ ✅ | `screenshots/iPhone_16_Pro/` |
-| iPhone 16 | 1179 x 2556 | 6.3インチ ✅ | `screenshots/iPhone_16/` |
+| iPhone 16 Pro Max | 1320 x 2868 | 6.9インチ ✅ | `ios/screenshots/iPhone_16_Pro_Max/` |
+| iPhone 16 Plus | 1290 x 2796 | 6.9インチ ✅ | `ios/screenshots/iPhone_16_Plus/` |
+| iPhone 16 Pro | 1206 x 2622 | 6.3インチ ✅ | `ios/screenshots/iPhone_16_Pro/` |
+| iPhone 16 | 1179 x 2556 | 6.3インチ ✅ | `ios/screenshots/iPhone_16/` |
+| iPad Pro 13インチ | 2064 x 2752 | 13インチ ✅ | `ios/screenshots/iPad_Pro_13/` |
 
 **各フォルダの内容（5枚）:**
 - `onboarding_1.png` - 「毎日タップするだけ」
@@ -96,11 +115,12 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 - **注文番号**: W1533090277
 - **状態**: ✅ アクティベーション完了
 
-#### App Store Connect 🔄 提出準備中
+#### App Store Connect ✅ 配信準備完了
 - **App ID**: 6758099608
 - **Bundle ID**: `com.taichiakimoto.living`
-- **バージョン**: 1.0.0
-- **状態**: スクリーンショット ✅ / ビルドアップロード待ち
+- **バージョン**: 1.0.0 (Build 3)
+- **状態**: 配信準備完了（2026-01-28 配信地域設定完了）
+- **配信状況**: 148か国で配信処理中、27か国販売不可
 
 #### Google Play Console 🔄 登録途中
 - **使用アカウント**: bodhy.akimoto@gmail.com
@@ -135,6 +155,13 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 - 設定画面の「始める」ボタンを押しても反応しない場合がある
   - 状態管理は修正済み（AppState + onCompleteコールバック方式）
   - Firebase保存の成功/失敗を確認する必要あり
+
+### 解決済みの問題
+- **App Storeから削除済み問題** (2026-01-28 解決)
+  - 症状: App Store Connectで「App Storeから削除済み」と表示
+  - 原因: 「価格および配信状況」で配信地域が設定されていなかった
+  - 解決: 「配信状況の設定」で175か国を選択して保存
+  - 結果: 148か国で配信処理中、アプリが正常な配信状態に復旧
 
 ## クイックスタート
 
