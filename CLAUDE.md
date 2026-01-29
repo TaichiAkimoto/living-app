@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-30 00:15
+**最終更新**: 2026-01-29 16:30
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -70,19 +70,28 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
     - Firestore Rules デプロイ完了
     - Cloud Functions デプロイ完了
     - Artifact Registry クリーンアップポリシー設定完了
+- **通知機能の動作確認** (2026-01-29): ✅ 完了
+  - Cloud Scheduler手動トリガーでテスト実行
+  - テストユーザー（deviceId: 7w685vbAk9OPEHnSF97RE26cyBc2）でメール受信成功
+  - Firestoreデータ更新確認（notified: true, notifiedAt: 2026-01-29 16:26:07）
+  - notificationLogsコレクションにログ記録確認（status: "sent", attemptCount: 1）
+  - **PIIマスキング動作確認**: ログに `i***@gmail.com` と正しくマスキング ✅
+  - **Secret Managerキャッシュ動作確認**: 2回目の送信でキャッシュ再利用 ✅
+  - **トランザクション処理確認**: 重複通知なし、notifiedフラグ正常更新 ✅
+  - 実行時間: 4003ms（約4秒）、2名の非アクティブユーザーを検出・通知
 
 ### 次にやること（次回セッション）
 
-1. **通知機能の動作確認** (2026-01-30 09:00 JST予定)
-   - Cloud Functionsログで実行成功を確認
-   - NotificationLogsコレクションにログが記録されているか確認
-   - テストユーザーでメール受信確認
-   - **重要**: 改善版の初回実行となるため、トランザクション処理とPIIマスキングを確認
-
-2. **Resendドメイン検証** (優先度: 高)
+1. **Resendドメイン検証** (優先度: 高)
    - `noreply@7th-bridge.com` のSPF/DKIM設定
    - Resend管理画面でドメイン認証完了
    - ドメイン認証が完了していない場合、メールが迷惑メールになる可能性あり
+
+2. **明日朝9:00の定期実行確認** (2026-01-30)
+   - ✅ テストデータ準備完了: `notified: false` に設定済み
+   - メール受信確認（italyitalienitalia@gmail.com）
+   - Cloud Functionsログで正常実行を確認
+   - 定期実行後、テストデータを元に戻す（lastCheckInを現在時刻に更新）
 
 3. **iOS: App Store配信確認**
    - 配信処理完了待ち（148か国処理中）
@@ -92,6 +101,41 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 4. **Android: Google Play Console 登録完了**
    - 重複課金返金依頼送信済み → 返信待ち
    - 返金確認後、正規の$25を支払い → AABアップロード → 審査提出
+
+### セッション履歴
+
+#### 2026-01-29: 通知機能の動作確認テスト
+
+**実施内容:**
+1. Firestoreでテストユーザーの `lastCheckIn` を3日前（2026-01-26）に変更
+2. Cloud SchedulerからCloud Functions（`checkInactiveUsers`）を手動実行
+3. メール受信、Firestoreデータ更新、ログ記録を確認
+
+**確認結果:**
+- ✅ メール送信成功: 緊急連絡先にメールが正常に届いた
+- ✅ Firestoreデータ更新: `notified: true`, `notifiedAt: 2026-01-29 16:26:07`
+- ✅ notificationLogs記録: `status: "sent"`, `attemptCount: 1`
+- ✅ PIIマスキング動作: ログに `i***@gmail.com` と正しくマスキング
+- ✅ Secret Managerキャッシュ: 2回目の送信でキャッシュ再利用（コスト削減）
+- ✅ トランザクション処理: 重複通知なし、notifiedフラグ正常更新
+- ✅ 実行時間: 4003ms（約4秒）、2名の非アクティブユーザーを検出・通知
+
+**gcloudログ確認コマンド:**
+```bash
+gcloud logging read "resource.type=cloud_function AND resource.labels.function_name=checkInactiveUsers AND timestamp>=\"2026-01-29T07:20:00Z\"" --project=living-2b928 --limit=50 --format="table(timestamp, severity, textPayload)" --order=desc
+```
+
+**Codexレビュー結果（重要）:**
+- ✅ スケジュール設定: 毎日9:00 JST実行確認（`Asia/Tokyo`）
+- ⚠️ **閾値の誤解**: 実装は「48時間（2日）」だが、テストは「3日前」で設定
+  - 仕様: 2日間未チェックで通知（48時間）
+  - テストデータ: lastCheckIn = 2026-01-26（3日前）→ 48時間超過のため対象 ✅
+- ⚠️ ドキュメント不一致: `docs/CODE_READING_GUIDE.md` が `timeZone("UTC")` と記載（実際は `Asia/Tokyo`）
+
+**次回の確認事項（2026-01-30 09:00以降）:**
+- メール受信確認（italyitalienitalia@gmail.com）
+- Cloud Functionsログ確認
+- 定期実行が正常に動作しているか確認
 
 ### スクリーンショット（2026-01-22〜23撮影）
 
