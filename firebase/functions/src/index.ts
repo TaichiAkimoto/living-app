@@ -118,6 +118,15 @@ async function processInactiveUser(
         throw new Error("Already notified");
       }
 
+      // 競合状態チェック: トランザクション内でlastCheckInを再確認
+      const threshold = new Date(Date.now() - 48 * 60 * 60 * 1000);
+      const lastCheckIn = currentData?.lastCheckIn?.toDate();
+
+      if (!lastCheckIn || lastCheckIn >= threshold) {
+        // クエリ後にチェックインされた、または不正なデータ
+        throw new Error("User already checked in");
+      }
+
       // notified フラグを true に更新（重複送信を防ぐ）
       transaction.update(userRef, {
         notified: true,
@@ -137,6 +146,11 @@ async function processInactiveUser(
   } catch (error: any) {
     if (error.message === "Already notified") {
       console.log(`Skipping ${deviceId}: already notified`);
+      return;
+    }
+
+    if (error.message === "User already checked in") {
+      console.log(`Skipping ${deviceId}: checked in after query (race condition prevented)`);
       return;
     }
 

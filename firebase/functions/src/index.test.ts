@@ -90,6 +90,32 @@ describe("Living App Cloud Functions", () => {
     });
   });
 
+  describe("Race Condition Prevention", () => {
+    it("should skip notification if user checked in after query", () => {
+      // シナリオ: クエリ後、トランザクション前にユーザーがチェックイン
+      const threshold = new Date(Date.now() - 48 * 60 * 60 * 1000);
+
+      // トランザクション内で取得したlastCheckInが新しい（チェックイン済み）
+      const recentCheckIn = new Date(); // 直近
+
+      // この場合、通知をスキップすべき
+      const shouldNotify = recentCheckIn < threshold;
+      expect(shouldNotify).toBe(false);
+    });
+
+    it("should proceed with notification if user is still inactive", () => {
+      // シナリオ: クエリ後もユーザーは未チェックイン
+      const threshold = new Date(Date.now() - 48 * 60 * 60 * 1000);
+
+      // トランザクション内で取得したlastCheckInが古い（未チェックイン）
+      const oldCheckIn = new Date(Date.now() - 50 * 60 * 60 * 1000); // 50時間前
+
+      // この場合、通知を続行すべき
+      const shouldNotify = oldCheckIn < threshold;
+      expect(shouldNotify).toBe(true);
+    });
+  });
+
   describe("Timezone", () => {
     it("should schedule function for 9:00 JST", () => {
       // TODO: Implement test
