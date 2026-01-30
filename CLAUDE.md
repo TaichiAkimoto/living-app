@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-29 16:30
+**最終更新**: 2026-01-30 13:45
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -79,6 +79,13 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
   - **Secret Managerキャッシュ動作確認**: 2回目の送信でキャッシュ再利用 ✅
   - **トランザクション処理確認**: 重複通知なし、notifiedフラグ正常更新 ✅
   - 実行時間: 4003ms（約4秒）、2名の非アクティブユーザーを検出・通知
+- **チェックイン失敗問題の修正** (2026-01-30): ✅ 完了＆デプロイ済み
+  - **根本原因**: Firestoreルールが `notified` フィールドのクライアント更新を全面禁止
+  - **修正内容**: `notified: true → false` のみ許可（チェックイン時のリセット）
+  - **セキュリティモデル**: クライアントは通知フラグをリセットのみ、立てることは不可（Cloud Functionsのみ）
+  - **影響範囲**: iOS/Android両方で解決
+  - **デプロイ**: dev/prod両環境のFirestoreルールを更新
+  - **動作確認**: italyitalienitalia@gmail.com で正常動作確認済み
 
 ### 次にやること（次回セッション）
 
@@ -136,6 +143,39 @@ gcloud logging read "resource.type=cloud_function AND resource.labels.function_n
 - メール受信確認（italyitalienitalia@gmail.com）
 - Cloud Functionsログ確認
 - 定期実行が正常に動作しているか確認
+
+#### 2026-01-30: チェックイン失敗問題の修正
+
+**問題の発生:**
+- ユーザーがiOS prod環境でチェックインボタンを押すと「チェックインに失敗しました」エラー
+- 緊急連絡先: italyitalienitalia@gmail.com
+
+**調査と原因特定:**
+1. Explore agentでiOSコード調査
+   - `FirebaseService.updateCheckIn()` が `updateData()` で `notified: false` を更新
+   - Firestoreルール L75 で `notified` が `serverOnlyFields` に含まれクライアント更新を拒否
+2. Plan agentで修正計画を設計
+   - Option A〜C を検討し、Option D（Firestoreルール修正）を選定
+   - セキュリティモデル: `true → false` のみ許可、`false → true` は拒否
+
+**実装:**
+1. `firebase/firestore.rules` を3箇所修正
+   - L72: `notified` を `allowedFields` に追加
+   - L75: `notified` を `serverOnlyFields` から削除
+   - L98: `notified: true → false` のみ許可する条件を追加
+2. dev環境デプロイ → prod環境デプロイ
+
+**動作確認:**
+- ✅ チェックイン成功（エラーメッセージなし）
+- ✅ Firestoreデータ確認
+  - Device ID: 7w685vbAk9OPEHnSF97RE26cyBc2
+  - lastCheckIn: 2026-01-30 13:38:43 (JST)
+  - notified: false（正しくリセット）
+
+**結果:**
+- iOS/Android両方でチェックイン正常動作
+- セキュリティモデル維持（クライアントは通知フラグを立てられない）
+- Cloud Functionsは引き続き `notified: true` に更新可能
 
 ### スクリーンショット（2026-01-22〜23撮影）
 
@@ -199,11 +239,15 @@ gcloud logging read "resource.type=cloud_function AND resource.labels.function_n
 - XcodeのDEVELOPMENT_TEAM: N87AGP76YT（project.pbxprojで設定済み）
 
 ### 既知の問題
-- 設定画面の「始める」ボタンを押しても反応しない場合がある
-  - 状態管理は修正済み（AppState + onCompleteコールバック方式）
-  - Firebase保存の成功/失敗を確認する必要あり
+（なし）
 
 ### 解決済みの問題
+- **チェックイン失敗問題** (2026-01-30 解決)
+  - 症状: iOS prodでチェックインボタンを押すと「チェックインに失敗しました」エラー
+  - 根本原因: Firestoreルールが `notified` フィールドのクライアント更新を全面禁止していた
+  - 解決: Firestoreルールを修正して `notified: true → false` のみ許可
+  - セキュリティ: クライアントは通知フラグを立てられない（Cloud Functionsのみ）
+  - 結果: iOS/Android両方でチェックイン正常動作、セキュリティも保たれる
 - **App Storeから削除済み問題** (2026-01-28 解決)
   - 症状: App Store Connectで「App Storeから削除済み」と表示
   - 原因: 「価格および配信状況」で配信地域が設定されていなかった
