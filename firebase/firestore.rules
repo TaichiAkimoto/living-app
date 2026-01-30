@@ -69,10 +69,10 @@ function isValidUserUpdate() {
   let changedKeys = data.diff(existingData).changedKeys();
 
   // クライアントが更新可能なフィールド
-  let allowedFields = ['name', 'emergencyContactName', 'emergencyContactEmail', 'lastCheckIn'].toSet();
+  let allowedFields = ['name', 'emergencyContactName', 'emergencyContactEmail', 'lastCheckIn', 'notified'].toSet();
 
   // サーバー専用フィールド（クライアントは変更不可）
-  let serverOnlyFields = ['notified', 'notifiedAt', 'createdAt'].toSet();
+  let serverOnlyFields = ['notifiedAt', 'createdAt'].toSet();
 
   return (
     // サーバー専用フィールドを変更していない
@@ -96,5 +96,9 @@ function isValidUserUpdate() {
     // lastCheckIn は timestamp（変更される場合）
     && (!changedKeys.hasAny(['lastCheckIn']) ||
         data.lastCheckIn is timestamp)
+
+    // notified は true → false のみ許可（チェックイン時のリセット）
+    && (!changedKeys.hasAny(['notified']) ||
+        (data.notified == false && existingData.notified == true))
   );
 }
