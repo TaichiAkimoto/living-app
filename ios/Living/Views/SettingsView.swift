@@ -6,11 +6,10 @@ struct SettingsView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @State private var name = ""
-    @State private var emergencyContactName = ""
-    @State private var emergencyContactEmail = ""
+    @StateObject private var viewModel = SettingsViewModel()
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @State private var showDiscardAlert = false
 
     private let firebaseService = FirebaseService.shared
 
@@ -44,7 +43,7 @@ struct SettingsView: View {
                                     .font(.system(size: 14, weight: .medium))
                                     .foregroundStyle(.secondary)
 
-                                TextField("", text: $name)
+                                TextField("", text: $viewModel.name)
                                     .textFieldStyle(SystemTextFieldStyle())
                                     .textContentType(.name)
                                     .autocorrectionDisabled()
@@ -63,7 +62,7 @@ struct SettingsView: View {
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundStyle(.secondary)
 
-                                    TextField("", text: $emergencyContactName)
+                                    TextField("", text: $viewModel.emergencyContactName)
                                         .textFieldStyle(SystemTextFieldStyle())
                                         .textContentType(.name)
                                         .autocorrectionDisabled()
@@ -74,7 +73,7 @@ struct SettingsView: View {
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundStyle(.secondary)
 
-                                    TextField("", text: $emergencyContactEmail)
+                                    TextField("", text: $viewModel.emergencyContactEmail)
                                         .textFieldStyle(SystemTextFieldStyle())
                                         .textContentType(.emailAddress)
                                         .keyboardType(.emailAddress)
@@ -99,8 +98,9 @@ struct SettingsView: View {
                                 .padding()
                         }
 
-                        // 保存ボタン
-                        Button(action: save) {
+                        // 保存ボタン（初期セットアップ時のみ）
+                        if isInitialSetup {
+                            Button(action: save) {
                             HStack {
                                 if isLoading {
                                     ProgressView()
@@ -112,12 +112,13 @@ struct SettingsView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .frame(height: 56)
-                            .background(isValid ? Color.accentColor : Color(.systemGray3))
+                            .background(viewModel.isValid ? Color.accentColor : Color(.systemGray3))
                             .foregroundColor(.white)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
+                            }
+                            .disabled(!viewModel.isValid || isLoading)
+                            .padding(.horizontal, 24)
                         }
-                        .disabled(!isValid || isLoading)
-                        .padding(.horizontal, 24)
 
                         Spacer()
                     }
@@ -126,12 +127,27 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if !isInitialSetup {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("閉じる") {
-                            dismiss()
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("キャンセル") {
+                            handleCancel()
                         }
                     }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("完了") {
+                            handleDone()
+                        }
+                        .disabled(!viewModel.isValid || isLoading)
+                    }
                 }
+            }
+            .alert("変更を破棄しますか？", isPresented: $showDiscardAlert) {
+                Button("破棄", role: .destructive) {
+                    viewModel.reset()
+                    dismiss()
+                }
+                Button("戻る", role: .cancel) { }
+            } message: {
+                Text("保存されていない変更があります")
             }
         }
         .onAppear {
@@ -139,28 +155,22 @@ struct SettingsView: View {
         }
     }
 
-    private var isValid: Bool {
-        !name.trimmingCharacters(in: .whitespaces).isEmpty &&
-        !emergencyContactName.trimmingCharacters(in: .whitespaces).isEmpty &&
-        emergencyContactEmail.contains("@") &&
-        name.count <= 50 &&
-        emergencyContactName.count <= 50
-    }
-
     private func loadExistingData() {
         Task {
             if let userData = await firebaseService.getUserData() {
                 await MainActor.run {
-                    name = userData.name
-                    emergencyContactName = userData.emergencyContactName
-                    emergencyContactEmail = userData.emergencyContactEmail
+                    viewModel.loadOriginalData(
+                        name: userData.name,
+                        emergencyContactName: userData.emergencyContactName,
+                        emergencyContactEmail: userData.emergencyContactEmail
+                    )
                 }
             }
         }
     }
 
     private func save() {
-        guard isValid else { return }
+        guard viewModel.isValid else { return }
 
         isLoading = true
         errorMessage = nil
@@ -168,9 +178,9 @@ struct SettingsView: View {
         Task {
             do {
                 let userData = UserData(
-                    name: name.trimmingCharacters(in: .whitespaces),
-                    emergencyContactName: emergencyContactName.trimmingCharacters(in: .whitespaces),
-                    emergencyContactEmail: emergencyContactEmail.trimmingCharacters(in: .whitespaces)
+                    name: viewModel.name.trimmingCharacters(in: .whitespaces),
+                    emergencyContactName: viewModel.emergencyContactName.trimmingCharacters(in: .whitespaces),
+                    emergencyContactEmail: viewModel.emergencyContactEmail.trimmingCharacters(in: .whitespaces)
                 )
 
                 try await firebaseService.saveUserData(userData)
@@ -189,6 +199,22 @@ struct SettingsView: View {
                     errorMessage = "保存に失敗しました: \(error.localizedDescription)"
                 }
             }
+        }
+    }
+
+    private func handleCancel() {
+        if viewModel.cancel() {
+            showDiscardAlert = true
+        } else {
+            dismiss()
+        }
+    }
+
+    private func handleDone() {
+        if viewModel.hasChanges {
+            save()
+        } else {
+            dismiss()
         }
     }
 }
