@@ -18,6 +18,7 @@
 		C6A5069ACC62E00D13AFDD37 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2C002F3A64288043E6AB95 /* UserData.swift */; };
 		C7FE6F4641FE517B4879F517 /* CheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCFE8E380459C45A130FFE01 /* CheckInView.swift */; };
 		ED207EEE83F931B21C360DE2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C0BDFF9DD3164BF36AD19F /* SettingsView.swift */; };
+		SETVM0010001000100010001 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = SETVM0010001000100010002 /* SettingsViewModel.swift */; };
 		ONBOARD0100010001000100AA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ONBOARD0100010001000100AB /* OnboardingView.swift */; };
 		SPLASH0100010001000100AA /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SPLASH0100010001000100AB /* SplashView.swift */; };
 		TEST0001000100010001000A /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TEST0001000100010001000B /* DateExtensionTests.swift */; };
@@ -34,9 +35,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5A6B7C8D9E0F1A2B3C4D5E60 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		72C0BDFF9DD3164BF36AD19F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7E111837E8199880BFD707DB /* CheckInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInViewModel.swift; sourceTree = "<group>"; };
+		SETVM0010001000100010002 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		9E2C002F3A64288043E6AB95 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		A9DC5DDB721B648D131CEBDC /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		ASSETS010001000100010002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -114,6 +115,7 @@
 				7E111837E8199880BFD707DB /* CheckInViewModel.swift */,
 				ONBOARD0100010001000100AB /* OnboardingView.swift */,
 				72C0BDFF9DD3164BF36AD19F /* SettingsView.swift */,
+				SETVM0010001000100010002 /* SettingsViewModel.swift */,
 				SPLASH0100010001000100AB /* SplashView.swift */,
 			);
 			path = Views;
@@ -137,7 +139,6 @@
 				6FC3C64CF7325590955B2295 /* Models */,
 				0DEC06DD5129AB3A92399DC1 /* Services */,
 				93E2793F0B9268F16802CF3B /* Views */,
-				5A6B7C8D9E0F1A2B3C4D5E60 /* GoogleService-Info.plist */,
 			);
 			path = Living;
 			sourceTree = "<group>";
@@ -280,6 +281,7 @@
 				1E563019DA4CC0A605F69F02 /* LivingApp.swift in Sources */,
 				ONBOARD0100010001000100AA /* OnboardingView.swift in Sources */,
 				ED207EEE83F931B21C360DE2 /* SettingsView.swift in Sources */,
+				SETVM0010001000100010001 /* SettingsViewModel.swift in Sources */,
 				SPLASH0100010001000100AA /* SplashView.swift in Sources */,
 				C6A5069ACC62E00D13AFDD37 /* UserData.swift in Sources */,
 			);
@@ -374,18 +376,21 @@
 			baseConfigurationReference = XCCFG001000100010001PRD0 /* Prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = N87AGP76YT;
-				INFOPLIST_KEY_CFBundleDisplayName = "$(inherited)";
+				INFOPLIST_KEY_CFBundleDisplayName = "生きろ。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.taichiakimoto.living;
+				PROVISIONING_PROFILE_SPECIFIER = "Living App Store";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -454,7 +459,7 @@
 			baseConfigurationReference = XCCFG001000100010001DEV0 /* Dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "$(inherited)";
 				DEVELOPMENT_TEAM = N87AGP76YT;
 				INFOPLIST_KEY_CFBundleDisplayName = "$(inherited)";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
