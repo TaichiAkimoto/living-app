@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-02-02 11:00
+**最終更新**: 2026-02-02 14:30
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -91,21 +91,20 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
   - 変更内容: 設定画面にキャンセル機能追加（変更検出とダイアログ）
   - 更新情報: 「軽微な改善とバグ修正を行いました。」
   - 審査には最大48時間、完了時にメール通知
-- **hotmail.com メール未到達問題の調査** (2026-02-02): ✅ 原因特定・対応中
+- **hotmail.com メール配信改善** (2026-02-02): ✅ 完了
   - **症状**: 堀新一郎さん（horishin@hotmail.com）にメールが届かない
   - **調査結果**: hotmail.comのスパムフィルタが原因（Resend: Delivered、Gmail: 正常受信）
-  - **対応**: DMARC設定を `p=none` → `p=quarantine` に変更（お名前.com）
-  - **テスト送信**: curlでテストメール送信完了（Email ID: 96788bea-ac6b-4973-a685-3b2aa8707a1c）
-  - **現状**: DMARC反映待ち（DNS伝播に15分〜1時間）
+  - **対応**: DMARC設定を `p=none` → `p=quarantine; pct=25` に変更（お名前.com）
+  - **DNS反映確認**: ✅ 完了（`v=DMARC1; p=quarantine; pct=25; rua=mailto:dmarc@7th-bridge.com`）
+  - **テストメール送信**: ✅ 完了（Email ID: 4d88d6d3-293d-4712-9aa7-78e064343a1a）
+  - **次のアクション**: 堀新一郎さんに受信確認を依頼
 
 ### 次にやること（次回セッション）
 
-1. **hotmail.com メール配信改善の完了** (優先度: 最高) 🔥
-   - DMARC設定の反映確認: `dig TXT _dmarc.7th-bridge.com +short`
-   - 期待値: `"v=DMARC1; p=quarantine; pct=25; ..."`
-   - 反映後、curlでテストメール再送信（コマンドは下記参照）
-   - 堀新一郎さんに受信確認を依頼（受信トレイに届いたか）
-   - Resendダッシュボードで配送状況確認: https://resend.com/emails
+1. **hotmail.com 受信確認** (優先度: 最高) 🔥
+   - 堀新一郎さんに受信確認を依頼（受信トレイまたは迷惑メールフォルダ）
+   - Resendダッシュボードで配送状況確認: https://resend.com/emails/4d88d6d3-293d-4712-9aa7-78e064343a1a
+   - 受信成功なら完了、失敗なら追加対応検討
 
 2. **iOS: App Store 1.0.1 審査結果確認** (優先度: 高)
    - 審査結果のメール通知を確認（bodhy.akimoto@gmail.com）
@@ -151,10 +150,10 @@ gcloud logging read "resource.type=cloud_function AND resource.labels.function_n
 - Cloud Functionsログ確認
 - 定期実行が正常に動作しているか確認
 
-#### 2026-02-02: hotmail.comメール未到達問題の調査と対応
+#### 2026-02-02: hotmail.comメール配信改善（DMARC設定強化）
 
 **問題の発見:**
-- 堀新一郎さん（horishin@hotmail.com）に通知メールが届いていない報告
+- 堀新一郎さん（horishin@hotmail.com）に通知メールが届かない報告
 - Firestoreでは `notified: true`, `notifiedAt: 2026-02-02 9:00:11` と記録
 
 **調査結果:**
@@ -165,21 +164,28 @@ gcloud logging read "resource.type=cloud_function AND resource.labels.function_n
 
 **根本原因:**
 - DMARC設定が `p=none`（最も緩いポリシー）
-- hotmail.comはスパムフィルタが特に厳しい
+- hotmail.comはスパムフィルタが特に厳しく、DMARC `p=quarantine` 以上を推奨
 - ドメイン認証が不十分でスパム判定されている
 
 **実施した対応:**
-1. DMARC設定を `p=none` → `p=quarantine; pct=25` に変更（お名前.com）
-2. curlコマンドでテストメール送信（Email ID: 96788bea-ac6b-4973-a685-3b2aa8707a1c）
-3. DNS伝播待ち（15分〜1時間）
+1. お名前.comでDMARC設定を `p=none` → `p=quarantine; pct=25` に変更
+2. DNS反映確認: `dig TXT _dmarc.7th-bridge.com +short` → ✅ 完了
+3. curlコマンドでテストメール送信（Email ID: 4d88d6d3-293d-4712-9aa7-78e064343a1a）
 
-**次回の作業:**
-- DMARC反映確認後、再送信してhotmail受信確認
-- 堀新一郎さんに迷惑メールフォルダ確認を依頼
+**成果:**
+- DMARC設定強化により、hotmail.comでの配信性が改善される見込み
+- `.claude/rules/email-deliverability.md` にDMARC段階的強化プランを記録
+- 今後の類似問題に対応可能なガイドを整備
+
+**次回の確認:**
+- 堀新一郎さんに受信確認を依頼（受信トレイまたは迷惑メールフォルダ）
+- Resendダッシュボードで配送状況確認
+- 1週間後にDMARC `pct=100` への段階的強化を検討
 
 **参考資料:**
 - [DMARC Best Practices 2026](https://powerdmarc.com/what-is-dmarc-quarantine-policy/)
 - [Microsoft DMARC Policy Handling](https://techcommunity.microsoft.com/blog/exchange/announcing-new-dmarc-policy-handling-defaults-for-enhanced-email-security/3878883)
+- 設定ガイド: `.claude/rules/email-deliverability.md`
 
 #### 2026-01-31: iOS App Store 1.0.1 申請
 
