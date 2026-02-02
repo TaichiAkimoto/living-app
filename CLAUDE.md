@@ -4,7 +4,7 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
 
 ## 現在のステータス
 
-**最終更新**: 2026-01-31 17:00
+**最終更新**: 2026-02-02 11:00
 
 ### 完了
 - iOS/Android: SwiftUI / Jetpack Compose 実装
@@ -91,26 +91,28 @@ Demumu（死了么）クローン。毎日チェックイン、2日間未チェ�
   - 変更内容: 設定画面にキャンセル機能追加（変更検出とダイアログ）
   - 更新情報: 「軽微な改善とバグ修正を行いました。」
   - 審査には最大48時間、完了時にメール通知
+- **hotmail.com メール未到達問題の調査** (2026-02-02): ✅ 原因特定・対応中
+  - **症状**: 堀新一郎さん（horishin@hotmail.com）にメールが届かない
+  - **調査結果**: hotmail.comのスパムフィルタが原因（Resend: Delivered、Gmail: 正常受信）
+  - **対応**: DMARC設定を `p=none` → `p=quarantine` に変更（お名前.com）
+  - **テスト送信**: curlでテストメール送信完了（Email ID: 96788bea-ac6b-4973-a685-3b2aa8707a1c）
+  - **現状**: DMARC反映待ち（DNS伝播に15分〜1時間）
 
 ### 次にやること（次回セッション）
 
-1. **iOS: App Store 1.0.1 審査結果確認** (優先度: 高)
+1. **hotmail.com メール配信改善の完了** (優先度: 最高) 🔥
+   - DMARC設定の反映確認: `dig TXT _dmarc.7th-bridge.com +short`
+   - 期待値: `"v=DMARC1; p=quarantine; pct=25; ..."`
+   - 反映後、curlでテストメール再送信（コマンドは下記参照）
+   - 堀新一郎さんに受信確認を依頼（受信トレイに届いたか）
+   - Resendダッシュボードで配送状況確認: https://resend.com/emails
+
+2. **iOS: App Store 1.0.1 審査結果確認** (優先度: 高)
    - 審査結果のメール通知を確認（bodhy.akimoto@gmail.com）
    - 承認後、リリースボタンをクリック
    - App Storeでバージョン1.0.1が表示されるか確認
 
-2. **Resendドメイン検証** (優先度: 高)
-   - `noreply@7th-bridge.com` のSPF/DKIM設定
-   - Resend管理画面でドメイン認証完了
-   - ドメイン認証が完了していない場合、メールが迷惑メールになる可能性あり
-
-3. **明日朝9:00の定期実行確認** (2026-01-31)
-   - ✅ テストデータ準備完了: `notified: false` に設定済み
-   - メール受信確認（italyitalienitalia@gmail.com）
-   - Cloud Functionsログで正常実行を確認
-   - 定期実行後、テストデータを元に戻す（lastCheckInを現在時刻に更新）
-
-4. **Android: Google Play Console 登録完了**
+3. **Android: Google Play Console 登録完了**
    - 重複課金返金依頼送信済み → 返信待ち
    - 返金確認後、正規の$25を支払い → AABアップロード → 審査提出
 
@@ -148,6 +150,36 @@ gcloud logging read "resource.type=cloud_function AND resource.labels.function_n
 - メール受信確認（italyitalienitalia@gmail.com）
 - Cloud Functionsログ確認
 - 定期実行が正常に動作しているか確認
+
+#### 2026-02-02: hotmail.comメール未到達問題の調査と対応
+
+**問題の発見:**
+- 堀新一郎さん（horishin@hotmail.com）に通知メールが届いていない報告
+- Firestoreでは `notified: true`, `notifiedAt: 2026-02-02 9:00:11` と記録
+
+**調査結果:**
+1. notificationLogs確認: `status: "sent"` → Resend APIから成功レスポンス ✅
+2. Resend配送状況: `Delivered` → hotmail.comのメールサーバーまで配送成功 ✅
+3. 同時刻のGmailユーザー（italyitalienitalia@gmail.com）: 正常受信 ✅
+4. **結論**: hotmail.com側のスパムフィルタで迷惑メール扱い（確定）
+
+**根本原因:**
+- DMARC設定が `p=none`（最も緩いポリシー）
+- hotmail.comはスパムフィルタが特に厳しい
+- ドメイン認証が不十分でスパム判定されている
+
+**実施した対応:**
+1. DMARC設定を `p=none` → `p=quarantine; pct=25` に変更（お名前.com）
+2. curlコマンドでテストメール送信（Email ID: 96788bea-ac6b-4973-a685-3b2aa8707a1c）
+3. DNS伝播待ち（15分〜1時間）
+
+**次回の作業:**
+- DMARC反映確認後、再送信してhotmail受信確認
+- 堀新一郎さんに迷惑メールフォルダ確認を依頼
+
+**参考資料:**
+- [DMARC Best Practices 2026](https://powerdmarc.com/what-is-dmarc-quarantine-policy/)
+- [Microsoft DMARC Policy Handling](https://techcommunity.microsoft.com/blog/exchange/announcing-new-dmarc-policy-handling-defaults-for-enhanced-email-security/3878883)
 
 #### 2026-01-31: iOS App Store 1.0.1 申請
 
